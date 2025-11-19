@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillTrack – Задания</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <style>
+      /* Маленькое всплывающее меню под именем пользователя */
+      .user-block{position:relative}
+      .user-name{
+        background:transparent;
+        border:none;
+        padding:0;
+        margin:0;
+        color:inherit;
+        cursor:pointer;
+        font-weight:600;
+        font-size:1rem;
+      }
+      .user-menu{
+        position:absolute;
+        right:0;
+        bottom:calc(100% + 8px); /* показывать сверху от имени пользователя */
+        top:auto;
+        background:#3a5ed0;
+        border:1px solid rgba(0,0,0,0.08);
+        box-shadow:0 6px 18px rgba(0,0,0,0.08);
+        border-radius:8px;
+        min-width:160px;
+        padding:6px;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+        z-index:30;
+      }
+      .user-menu a{
+        padding:8px 10px;
+        border-radius:6px;
+        color:#fff;
+        text-decoration:none;
+        font-size:0.95rem;
+      }
+      .user-menu a:hover{background:#f6f7fb}
+      .user-menu[hidden]{display:none}
+    </style>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+
+        <h2 class="logo">SkillTrack</h2>
+
+        <nav class="menu">
+            <a class="menu-item active" data-tab="tasks">Задания</a>
+            <a class="menu-item" data-tab="grades">Оценки</a>
+        </nav>
+
+        <!-- Профиль внизу -->
+        <div class="user-block">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <button type="button" class="user-name" id="userToggle" aria-expanded="false">mdo ▾</button>
+                <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
+                    <a href="#" class="user-link" role="menuitem">Профиль</a>
+                    <a href="#" class="user-link" role="menuitem">Настройки</a>
+                    <a href="#" class="user-link logout" role="menuitem">Выйти</a>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="content">
+
+        <div class="tasks">
+        <h1 class="title">Список заданий</h1>
+            <div class="task selected">
+                <div>
+                    <h3>Задание 0</h3>
+                    <p>Тут будет написано ваше задание</p>
+                </div>
+                <span class="date">Среда</span>
+            </div>
+
+            <div class="task">
+                <div>
+                    <h3>Задание 1</h3>
+                    <p>Тут будет написано ваше задание</p>
+                </div>
+                <span class="date">Вторник</span>
+            </div>
+
+            <div class="task">
+                <div>
+                    <h3>Задание 2</h3>
+                    <p>Тут будет написано ваше задание</p>
+                </div>
+                <span class="date">Вторник</span>
+            </div>
+
+            <div class="task">
+                <div>
+                    <h3>Задание 3</h3>
+                    <p>Тут будет написано ваше задание</p>
+                </div>
+                <span class="date">Вторник</span>
+            </div>
+
+            <div class="task">
+                <div>
+                    <h3>Задание 4</h3>
+                    <p>Тут будет написано ваше задание</p>
+                </div>
+                <span class="date">Вторник</span>
+            </div>
+
+        </div>
+
+        <!-- Вкладка Оценки (по умолчанию скрыта, дизайн не меняется) -->
+        <div id="grades" style="display:none;">
+            <h1 class="title">Оценки</h1>
+            <div class="tasks grades-list">
+                <div class="task">
+                    <div>
+                        <h3>Математика — Контрольная</h3>
+                        <p>Короткое описание / комментарий</p>
+                    </div>
+                    <span class="date">92</span>
+                </div>
+                <div class="task">
+                    <div>
+                        <h3>Алгоритмы — Домашняя</h3>
+                        <p>Короткое описание / комментарий</p>
+                    </div>
+                    <span class="date">85</span>
+                </div>
+                <div class="task">
+                    <div>
+                        <h3>Веб — Лабораторная</h3>
+                        <p>Короткое описание / комментарий</p>
+                    </div>
+                    <span class="date">88</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Скрипт переключения вкладок: не меняет дизайн, только поведение -->
+<script>
+  (function(){
+    const menu = document.querySelectorAll('.menu .menu-item');
+    const tasks = document.querySelector('.tasks');
+    const grades = document.getElementById('grades');
+    function show(tab){
+      if(tab === 'grades'){
+        if(tasks) tasks.style.display = 'none';
+        if(grades) grades.style.display = '';
+      } else {
+        if(tasks) tasks.style.display = '';
+        if(grades) grades.style.display = 'none';
+      }
+      menu.forEach(m => m.classList.toggle('active', m.dataset.tab === tab));
+    }
+    menu.forEach(m => m.addEventListener('click', () => show(m.dataset.tab)));
+    // init (оставить активный пункт)
+    const init = document.querySelector('.menu .menu-item.active');
+    if(init && init.dataset.tab) show(init.dataset.tab);
+  })();
+</script>
+
+<!-- Скрипт для открытия/закрытия меню пользователя -->
+<script>
+  (function(){
+    const btn = document.getElementById('userToggle');
+    const menu = document.getElementById('userMenu');
+    if(!btn || !menu) return;
+
+    function closeMenu(){
+      menu.setAttribute('hidden','');
+      btn.setAttribute('aria-expanded','false');
+    }
+    function openMenu(){
+      menu.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded','true');
+    }
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(menu.hasAttribute('hidden')) openMenu(); else closeMenu();
+    });
+    // закрыть при клике вне меню
+    document.addEventListener('click', (e) => {
+      if(!menu.contains(e.target) && e.target !== btn) closeMenu();
+    });
+    // Esc закрывает
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+  })();
+</script>
+
+</body>
+</html>

@@ -3,21 +3,25 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template("main.html")
 
-@app.route('/home')
+
+@app.route("/home")
 def grades():
-    return render_template('glavnaya.html')
+    return render_template("home_student.html")
 
-@app.route('/sign')
+
+@app.route("/sign")
 def sign_in():
-    return render_template('sign.html')
+    return render_template("sign.html")
 
-@app.route('/registration')
+
+@app.route("/registration")
 def registration():
-    return render_template('registr.html')
+    return render_template("registr.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
