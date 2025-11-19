@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4a6ee0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.2);
+        }
+
+        .role-selection {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .role-option:hover {
+            border-color: #4a6ee0;
+            background-color: #f8f9ff;
+        }
+
+        .role-option.selected {
+            border-color: #4a6ee0;
+            background-color: #eef2ff;
+        }
+
+        .role-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .role-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .role-desc {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .token-field {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .token-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .token-info svg {
+            margin-right: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4a6ee0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #3a5ed0;
+            box-shadow: 0 5px 15px rgba(74, 110, 224, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #4a6ee0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .divider-text {
+            padding: 0 15px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Создать аккаунт</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="fullName">ФИО</label>
+                <input type="text" id="fullName" placeholder="Введите ваше полное имя" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="example@domain.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Не менее 8 символов" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Подтвердите пароль</label>
+                <input type="password" id="confirmPassword" placeholder="Повторите ваш пароль" required>
+            </div>
+
+            <div class="divider">
+                <div class="divider-text">Выберите вашу роль</div>
+            </div>
+
+            <div class="role-selection">
+                <div class="role-option" data-role="student">
+                    <div class="role-icon">🎓</div>
+                    <div class="role-name">Ученик</div>
+                    <div class="role-desc">Ищу знания</div>
+                </div>
+                <div class="role-option" data-role="teacher">
+                    <div class="role-icon">👨‍🏫</div>
+                    <div class="role-name">Преподаватель</div>
+                    <div class="role-desc">Делюсь знаниями</div>
+                </div>
+            </div>
+
+            <div class="form-group token-field" id="tokenField">
+                <label for="token">Токен преподавателя</label>
+                <input type="text" id="token" placeholder="Введите токен, предоставленный администрацией">
+                <div class="token-info">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1ZM8 13.5C4.96243 13.5 2.5 11.0376 2.5 8C2.5 4.96243 4.96243 2.5 8 2.5C11.0376 2.5 13.5 4.96243 13.5 8C13.5 11.0376 11.0376 13.5 8 13.5Z" fill="#666"/>
+                        <path d="M8 4C8.27614 4 8.5 4.22386 8.5 4.5V8C8.5 8.27614 8.27614 8.5 8 8.5C7.72386 8.5 7.5 8.27614 7.5 8V4.5C7.5 4.22386 7.72386 4 8 4Z" fill="#666"/>
+                        <path d="M9 11C9 11.5523 8.55228 12 8 12C7.44772 12 7 11.5523 7 11C7 10.4477 7.44772 10 8 10C8.55228 10 9 10.4477 9 11Z" fill="#666"/>
+                    </svg>
+                    Токен необходим для регистрации преподавателя
+                </div>
+            </div>
+
+            <button type="submit">Зарегистрироваться</button>
+
+            <div class="login-link">
+                Уже есть аккаунт? <a href="#">Войти</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleOptions = document.querySelectorAll('.role-option');
+            const tokenField = document.getElementById('tokenField');
+            const tokenInput = document.getElementById('token');
+            let selectedRole = null;
+
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Убираем выделение со всех вариантов
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Добавляем выделение к выбранному варианту
+                    this.classList.add('selected');
+
+                    // Сохраняем выбранную роль
+                    selectedRole = this.getAttribute('data-role');
+
+                    // Показываем или скрываем поле для токена
+                    if (selectedRole === 'teacher') {
+                        tokenField.style.display = 'block';
+                        tokenInput.required = true;
+                    } else {
+                        tokenField.style.display = 'none';
+                        tokenInput.required = false;
+                    }
+                });
+            });
+
+            const form = document.getElementById('registrationForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (!selectedRole) {
+                    alert('Пожалуйста, выберите вашу роль (ученик или преподаватель)');
+                    return;
+                }
+
+                // Проверка паролей
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+
+                // Проверка токена для преподавателя
+                if (selectedRole === 'teacher') {
+                    const token = tokenInput.value.trim();
+                    if (!token) {
+                        alert('Для регистрации преподавателя необходим токен');
+                        return;
+                    }
+
+                    // Здесь можно добавить дополнительную проверку токена
+                    if (token.length < 8) {
+                        alert('Токен должен содержать не менее 8 символов');
+                        return;
+                    }
+                }
+
+                // Здесь обычно отправка данных на сервер
+                alert(`Регистрация успешна! Вы зарегистрированы как: ${selectedRole === 'student' ? 'Ученик' : 'Преподаватель'}`);
+            });
+        });
+    </script>
+</body>
+</html>

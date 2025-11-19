@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #333;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4a6ee0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: #4a6ee0;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4a6ee0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #3a5ed0;
+            box-shadow: 0 5px 15px rgba(74, 110, 224, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #4a6ee0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Вход в систему</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="example@domain.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Введите ваш пароль" required>
+            </div>
+
+            <button type="submit">Войти</button>
+
+            <div class="register-link">
+                Нет аккаунта? <a href="#">Зарегистрироваться</a>
+            </div>
+        </form>
+
+        <footer>
+            © 2017–2025
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Получаем значения полей
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const remember = document.getElementById('remember').checked;
+
+                // Простая валидация
+                if (!email || !password) {
+                    alert('Пожалуйста, заполните все поля');
+                    return;
+                }
+
+                // Здесь обычно отправка данных на сервер
+                alert('Вход выполнен успешно!');
+
+                // В реальном приложении здесь была бы переадресация
+                // или обработка ответа от сервера
+            });
+        });
+    </script>
+</body>
+</html>

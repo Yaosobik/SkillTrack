@@ -7,97 +7,29 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <title>Активе торе</title>
+    <title></title>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <!-- sidebar -->
-      <aside class="col-md-3 col-lg-2 bg-dark text-white vh-100 p-3">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-          <svg class="bi pe-none me-2" width="40" height="32" aria-hidden="true">
-            <use xlink:href="#bootstrap"></use>
-          </svg>
-          <span class="fs-4">Главная</span>
-        </a>
-        <hr class="text-white-50">
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-              <svg class="bi pe-none me-2" width="16" height="16" aria-hidden="true"><use xlink:href="#home"></use></svg>
-              Задания
+  <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+          <div class="col-md-3 mb-2 mb-md-0">
+            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+              <img class="header__img" src="{{ url_for('static', filename='image/747.png') }}" alt="apple">
             </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi pe-none me-2" width="16" height="16" aria-hidden="true"><use xlink:href="#speedometer2"></use></svg>
-              Оценки
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi pe-none me-2" width="16" height="16" aria-hidden="true"><use xlink:href="#table"></use></svg>
-              Orders
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi pe-none me-2" width="16" height="16" aria-hidden="true"><use xlink:href="#grid"></use></svg>
-              Products
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi pe-none me-2" width="16" height="16" aria-hidden="true"><use xlink:href="#people-circle"></use></svg>
-              Customers
-            </a>
-          </li>
-        </ul>
-        <hr class="text-white-50">
-        <div class="dropdown">
-          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>mdo</strong>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-            <li><a class="dropdown-item" href="#">Настройки</a></li>
-            <li><a class="dropdown-item" href="#">Профиль</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Выйти</a></li>
-          </ul>
-        </div>
-      </aside>
 
-      <!-- main content -->
-      <main class="col-md-9 col-lg-10 py-3">
-        <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom">
-          <svg class="bi pe-none me-2" width="30" height="24" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg>
-          <span class="fs-5 fw-semibold">Список заданий</span>
-        </a>
-
-        <!-- list: ограничим высоту и включим прокрутку внутри колонки -->
-        <div class="list-group list-group-flush border-bottom scrollarea mt-3" style="max-height: calc(100vh - 150px); overflow:auto;">
-          <a href="#" class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">
-            <div class="d-flex w-100 align-items-center justify-content-between">
-              <strong class="mb-1">Задание 1</strong>
-              <small>Среда</small>
-            </div>
-            <div class="col-10 mb-1 small">Тут будет написано ваше задание</div>
-          </a>
-          <!-- оставшиеся элементы списка (скопируйте ваши существующие <a> элементы сюда) -->
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
-            <div class="d-flex w-100 align-items-center justify-content-between">
-              <strong class="mb-1">Задание 2</strong>
-              <small class="text-body-secondary">Вторник</small>
-            </div>
-            <div class="col-10 mb-1 small">Тут будет написано ваше задание</div>
-          </a>
-          <!-- ... остальные items ... -->
-        </div>
-      </main>
-    </div>
-  </div>
-
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href </li>
+            </ul>
+          </div>
+          <div class="col-md-3 text-end">
+            <button type="button" class="btn btn-outline-primary me-2">
+              Войти
+            </button>
+            <button type="button" class="btn btn-primary">Зарегестрироваться</button>
+          </div>
+        </header>
+    <h1>SkillTrack</h1>
+      </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
