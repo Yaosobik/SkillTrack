@@ -11,9 +11,13 @@ class Discipl (db.Model):
     fullname = db.Column(db.String(300), nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
+
 #БД учитель
 class Teacher (db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String(300), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
 
 @app.route('/')
 def index():
