@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db
+from .extensions import db, migrate
 from .config import Config
 
 from app.routes.user import student, teacher
@@ -12,6 +12,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     db.init_app(app)
+    migrate.init_app(app, db)
 
     app.register_blueprint(student)
     app.register_blueprint(teacher)
