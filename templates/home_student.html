@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href = "{{ url_for('static', filename='css/main.css') }}">
     <title>SkillTrack – Ученик</title>
     <style>
         /* Основные стили страницы */
@@ -34,12 +35,26 @@
             padding: 24px 16px;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
+        .logo-container {
+            display: flex;
+            align-items: center;
             margin-bottom: 32px;
             padding: 0 8px;
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
         }
 
         .menu {
@@ -90,10 +105,18 @@
             height: 36px;
             border-radius: 50%;
             background-color: #3a5ed0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
         .user-info {
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .user-name {
@@ -105,6 +128,13 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 1rem;
+            text-align: left;
+        }
+
+        .user-role {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-top: 2px;
         }
 
         /* Маленькое всплывающее меню под именем пользователя */
@@ -321,13 +351,34 @@
         .tab-content.active {
             display: block;
         }
+
+        /* Дополнительные стили для прогресса */
+        .progress-bar {
+            height: 8px;
+            background: #e4e7f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3a5ed0;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <div class="layout">
         <!-- ЛЕВАЯ ПАНЕЛЬ - ТЕМНАЯ -->
         <aside class="sidebar">
-            <h2 class="logo">SkillTrack</h2>
+            <!-- Логотип и название вверху -->
+            <div class="logo-container">
+                <!-- Замените src на путь к вашему PNG логотипу -->
+                <img class="logo__image" src="../static/image/logo_home.png" alt="SkillTrack">
+            </div>
+
             <nav class="menu">
                 <a class="menu-item active" data-tab="tasks">Задания</a>
                 <a class="menu-item" data-tab="grades">Оценки</a>
@@ -336,9 +387,10 @@
 
             <!-- Профиль внизу -->
             <div class="user-block">
-                <div class="avatar"></div>
+                <div class="avatar">ИА</div>
                 <div class="user-info">
                     <button type="button" class="user-name" id="userToggle" aria-expanded="false">Иванов А. ▾</button>
+                    <div class="user-role">Ученик</div>
                     <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
                         <a href="#" class="user-link" role="menuitem">Профиль</a>
                         <a href="#" class="user-link" role="menuitem">Настройки</a>
@@ -465,8 +517,8 @@
                                     <span>Выполнено:</span>
                                     <span style="font-weight: 600;">3/5 (60%)</span>
                                 </div>
-                                <div style="height: 8px; background: #e4e7f0; border-radius: 4px; overflow: hidden;">
-                                    <div style="height: 100%; width: 60%; background: #3a5ed0;"></div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -488,6 +540,9 @@
                         <div>
                             <h3>Математика</h3>
                             <p>Выполнено 8 из 10 заданий</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%;"></div>
+                            </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span class="date">Средний балл: 4.2</span>
@@ -498,6 +553,9 @@
                         <div>
                             <h3>Алгоритмы</h3>
                             <p>Выполнено 6 из 8 заданий</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span class="date">Средний балл: 4.5</span>
@@ -508,6 +566,9 @@
                         <div>
                             <h3>Веб-разработка</h3>
                             <p>Выполнено 5 из 6 заданий</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 83%;"></div>
+                            </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span class="date">Средний балл: 4.8</span>
@@ -518,6 +579,9 @@
                         <div>
                             <h3>Базы данных</h3>
                             <p>Выполнено 4 из 5 заданий</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%;"></div>
+                            </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span class="date">Средний балл: 4.7</span>
@@ -588,4 +652,4 @@
         })();
     </script>
 </body>
-</html>
+</html>)

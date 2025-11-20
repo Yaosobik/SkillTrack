@@ -9,10 +9,6 @@ def home():
     return render_template("main.html")
 
 
-@app.route("/home/student")
-def grades():
-    return render_template("home_student.html")
-
 
 @app.route("/sign")
 def sign_in():
@@ -29,7 +25,6 @@ def sign_teacher():
     return render_template("sign_teacher.html")
 
 
-
 @app.route("/registration")
 def registration():
     return render_template("registr.html")
@@ -39,10 +34,15 @@ def registration():
 def registration_student():
     return render_template("registr_student.html")
 
+
 @app.route("/registration/teacher")
 def registration_teacher():
     return render_template("registr_teacher.html")
 
+
+@app.route("/home/student")
+def grades():
+    return render_template("home_student.html")
 
 
 @app.route("/home/teacher")
