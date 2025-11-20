@@ -2,8 +2,8 @@ from flask import Flask  # , render_template
 from .extensions import db
 from .config import Config
 
-from .routes.user import student, teacher
-from .routes.task import task
+from app.routes.user import student, teacher
+from app.routes.task import task
 
 
 def create_app(config_class=Config):

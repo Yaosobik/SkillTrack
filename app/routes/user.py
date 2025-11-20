@@ -1,6 +1,6 @@
 from flask import Blueprint
-from ..extensions import db
-from ..models.user import Student, Teacher
+from app.extensions import db
+from app.models.user import Student, Teacher
 
 student = Blueprint("student", __name__)
 teacher = Blueprint("teacher", __name__)

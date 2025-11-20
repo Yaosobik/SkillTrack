@@ -1,6 +1,6 @@
 from flask import Blueprint
-from ..extensions import db
-from ..models.task import Task
+from app.extensions import db
+from app.models.task import Task
 
 task = Blueprint("task", __name__)
 
