@@ -321,34 +321,6 @@
         .tab-content.active {
             display: block;
         }
-
-        /* Статистика */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #3a5ed0;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
     </style>
 </head>
 <body>
@@ -381,25 +353,6 @@
             <!-- Вкладка "Задания" -->
             <div id="tasks" class="tab-content active">
                 <h1 class="title">Мои задания</h1>
-
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-value">5</div>
-                        <div class="stat-label">Всего заданий</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Выполнено</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">2</div>
-                        <div class="stat-label">Ожидают проверки</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">85%</div>
-                        <div class="stat-label">Общий прогресс</div>
-                    </div>
-                </div>
 
                 <div class="tasks">
                     <div class="task selected">
@@ -458,25 +411,6 @@
             <!-- Вкладка "Оценки" -->
             <div id="grades" class="tab-content">
                 <h1 class="title">Мои оценки</h1>
-
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-value">4.5</div>
-                        <div class="stat-label">Средний балл</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">12</div>
-                        <div class="stat-label">Всего работ</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Высший балл</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">85%</div>
-                        <div class="stat-label">Успеваемость</div>
-                    </div>
-                </div>
 
                 <div class="tasks">
                     <div class="task">
