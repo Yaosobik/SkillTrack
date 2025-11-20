@@ -1,0 +1,239 @@
+<!-- {% extends "sign.html" %} -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для преподавателей</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .role-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .role-icon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border-color: #4a6ee0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: #4a6ee0;
+        }
+
+        .token-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .token-info svg {
+            margin-right: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4a6ee0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #3a5ed0;
+            box-shadow: 0 5px 15px rgba(74, 110, 224, 0.3);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .back-link a {
+            color: #4a6ee0;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #4a6ee0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="role-header">
+            <div class="role-icon">👨‍🏫</div>
+            <h1>Вход для преподавателей</h1>
+        </div>
+        
+        <form id="teacherLoginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="example@domain.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Введите ваш пароль" required>
+            </div>
+
+            <div class="form-group">
+                <label for="token">Токен преподавателя</label>
+                <input type="text" id="token" placeholder="Введите токен, предоставленный администрацией" required>
+                <div class="token-info">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1ZM8 13.5C4.96243 13.5 2.5 11.0376 2.5 8C2.5 4.96243 4.96243 2.5 8 2.5C11.0376 2.5 13.5 4.96243 13.5 8C13.5 11.0376 11.0376 13.5 8 13.5Z" fill="#666"/>
+                        <path d="M8 4C8.27614 4 8.5 4.22386 8.5 4.5V8C8.5 8.27614 8.27614 8.5 8 8.5C7.72386 8.5 7.5 8.27614 7.5 8V4.5C7.5 4.22386 7.72386 4 8 4Z" fill="#666"/>
+                        <path d="M9 11C9 11.5523 8.55228 12 8 12C7.44772 12 7 11.5523 7 11C7 10.4477 7.44772 10 8 10C8.55228 10 9 10.4477 9 11Z" fill="#666"/>
+                    </svg>
+                    Токен необходим для входа преподавателя
+                </div>
+            </div>
+
+            <button type="submit" onclick="window.location.href='/home/teacher'">Войти</button>
+
+            <div class="register-link">
+                Нет аккаунта? <a href="/registration">Зарегистрироваться</a>
+            </div>
+
+            <div class="back-link">
+                <a href="/sign">← Вернуться к выбору роли</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('teacherLoginForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Получаем значения полей
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const remember = document.getElementById('remember').checked;
+                const token = document.getElementById('token').value.trim();
+
+                // Простая валидация
+                if (!email || !password || !token) {
+                    alert('Пожалуйста, заполните все обязательные поля');
+                    return;
+                }
+
+                // Проверка токена
+                if (token.length < 8) {
+                    alert('Токен должен содержать не менее 8 символов');
+                    return;
+                }
+
+                // Здесь обычно отправка данных на сервер
+                alert(`Вход выполнен успешно! Вы вошли как: Преподаватель`);
+
+                // В реальном приложении здесь была бы переадресация
+                // или обработка ответа от сервера
+            });
+        });
+    </script>
+</body>
+</html>
