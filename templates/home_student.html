@@ -3,206 +3,655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillTrack – Задания</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <title>SkillTrack – Ученик</title>
     <style>
-      /* Маленькое всплывающее меню под именем пользователя */
-      .user-block{position:relative}
-      .user-name{
-        background:transparent;
-        border:none;
-        padding:0;
-        margin:0;
-        color:inherit;
-        cursor:pointer;
-        font-weight:600;
-        font-size:1rem;
-      }
-      .user-menu{
-        position:absolute;
-        right:0;
-        bottom:calc(100% + 8px); /* показывать сверху от имени пользователя */
-        top:auto;
-        background:#3a5ed0;
-        border:1px solid rgba(0,0,0,0.08);
-        box-shadow:0 6px 18px rgba(0,0,0,0.08);
-        border-radius:8px;
-        min-width:160px;
-        padding:6px;
-        display:flex;
-        flex-direction:column;
-        gap:6px;
-        z-index:30;
-      }
-      .user-menu a{
-        padding:8px 10px;
-        border-radius:6px;
-        color:#fff;
-        text-decoration:none;
-        font-size:0.95rem;
-      }
-      .user-menu a:hover{background:#f6f7fb}
-      .user-menu[hidden]{display:none}
+        /* Основные стили страницы */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f6f7fb;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Левая панель - ТЕМНАЯ */
+        .sidebar {
+            width: 240px;
+            background: #1a1a1a;
+            border-right: 1px solid #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #ccc;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        .menu-item.active {
+            background-color: #3a5ed0;
+            color: white;
+        }
+
+        /* Профиль внизу */
+        .user-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .user-block:hover {
+            background-color: #2d2d2d;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3a5ed0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Маленькое всплывающее меню под именем пользователя */
+        .user-menu {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            top: auto;
+            background: #3a5ed0;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            min-width: 160px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+        }
+
+        .user-menu a {
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu[hidden] {
+            display: none;
+        }
+
+        /* Основной контент */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        /* Задания */
+        .tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .task:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .task.selected {
+            border-color: #3a5ed0;
+            background-color: #f8f9ff;
+        }
+
+        .task h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .task p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.completed {
+            background: #d1edff;
+            color: #0c5460;
+        }
+
+        .status.overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Формы */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3a5ed0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3a5ed0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2d4bb7;
+        }
+
+        .btn-secondary {
+            background: #f0f2f8;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e7f0;
+        }
+
+        /* Таблицы */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .table th, .table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover {
+            background: #f8f9ff;
+        }
+
+        /* Скрытые вкладки */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Статистика */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3a5ed0;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
+    <div class="layout">
+        <!-- ЛЕВАЯ ПАНЕЛЬ - ТЕМНАЯ -->
+        <aside class="sidebar">
+            <h2 class="logo">SkillTrack</h2>
+            <nav class="menu">
+                <a class="menu-item active" data-tab="tasks">Задания</a>
+                <a class="menu-item" data-tab="grades">Оценки</a>
+                <a class="menu-item" data-tab="progress">Прогресс</a>
+            </nav>
 
-<div class="layout">
-
-    <!-- ЛЕВАЯ ПАНЕЛЬ -->
-    <aside class="sidebar">
-
-        <h2 class="logo">SkillTrack</h2>
-
-        <nav class="menu">
-            <a class="menu-item active" data-tab="tasks">Задания</a>
-            <a class="menu-item" data-tab="grades">Оценки</a>
-        </nav>
-
-        <!-- Профиль внизу -->
-        <div class="user-block">
-            <div class="avatar"></div>
-            <div class="user-info">
-                <button type="button" class="user-name" id="userToggle" aria-expanded="false">mdo ▾</button>
-                <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
-                    <a href="#" class="user-link" role="menuitem">Профиль</a>
-                    <a href="#" class="user-link" role="menuitem">Настройки</a>
-                    <a href="#" class="user-link logout" role="menuitem">Выйти</a>
-                </div>
-            </div>
-        </div>
-
-    </aside>
-
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    <main class="content">
-
-        <div class="tasks">
-        <h1 class="title">Список заданий</h1>
-            <div class="task selected">
-                <div>
-                    <h3>Задание 0</h3>
-                    <p>Тут будет написано ваше задание</p>
-                </div>
-                <span class="date">Среда</span>
-            </div>
-
-            <div class="task">
-                <div>
-                    <h3>Задание 1</h3>
-                    <p>Тут будет написано ваше задание</p>
-                </div>
-                <span class="date">Вторник</span>
-            </div>
-
-            <div class="task">
-                <div>
-                    <h3>Задание 2</h3>
-                    <p>Тут будет написано ваше задание</p>
-                </div>
-                <span class="date">Вторник</span>
-            </div>
-
-            <div class="task">
-                <div>
-                    <h3>Задание 3</h3>
-                    <p>Тут будет написано ваше задание</p>
-                </div>
-                <span class="date">Вторник</span>
-            </div>
-
-            <div class="task">
-                <div>
-                    <h3>Задание 4</h3>
-                    <p>Тут будет написано ваше задание</p>
-                </div>
-                <span class="date">Вторник</span>
-            </div>
-
-        </div>
-
-        <!-- Вкладка Оценки (по умолчанию скрыта, дизайн не меняется) -->
-        <div id="grades" style="display:none;">
-            <h1 class="title">Оценки</h1>
-            <div class="tasks grades-list">
-                <div class="task">
-                    <div>
-                        <h3>Математика — Контрольная</h3>
-                        <p>Короткое описание / комментарий</p>
+            <!-- Профиль внизу -->
+            <div class="user-block">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <button type="button" class="user-name" id="userToggle" aria-expanded="false">Иванов А. ▾</button>
+                    <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
+                        <a href="#" class="user-link" role="menuitem">Профиль</a>
+                        <a href="#" class="user-link" role="menuitem">Настройки</a>
+                        <a href="#" class="user-link logout" role="menuitem">Выйти</a>
                     </div>
-                    <span class="date">92</span>
-                </div>
-                <div class="task">
-                    <div>
-                        <h3>Алгоритмы — Домашняя</h3>
-                        <p>Короткое описание / комментарий</p>
-                    </div>
-                    <span class="date">85</span>
-                </div>
-                <div class="task">
-                    <div>
-                        <h3>Веб — Лабораторная</h3>
-                        <p>Короткое описание / комментарий</p>
-                    </div>
-                    <span class="date">88</span>
                 </div>
             </div>
-        </div>
+        </aside>
 
-    </main>
+        <!-- ОСНОВНОЙ КОНТЕНТ -->
+        <main class="content">
+            <!-- Вкладка "Задания" -->
+            <div id="tasks" class="tab-content active">
+                <h1 class="title">Мои задания</h1>
 
-</div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Всего заданий</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Выполнено</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Ожидают проверки</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Общий прогресс</div>
+                    </div>
+                </div>
 
-<!-- Скрипт переключения вкладок: не меняет дизайн, только поведение -->
-<script>
-  (function(){
-    const menu = document.querySelectorAll('.menu .menu-item');
-    const tasks = document.querySelector('.tasks');
-    const grades = document.getElementById('grades');
-    function show(tab){
-      if(tab === 'grades'){
-        if(tasks) tasks.style.display = 'none';
-        if(grades) grades.style.display = '';
-      } else {
-        if(tasks) tasks.style.display = '';
-        if(grades) grades.style.display = 'none';
-      }
-      menu.forEach(m => m.classList.toggle('active', m.dataset.tab === tab));
-    }
-    menu.forEach(m => m.addEventListener('click', () => show(m.dataset.tab)));
-    // init (оставить активный пункт)
-    const init = document.querySelector('.menu .menu-item.active');
-    if(init && init.dataset.tab) show(init.dataset.tab);
-  })();
-</script>
+                <div class="tasks">
+                    <div class="task selected">
+                        <div>
+                            <h3>Задание 1: Алгоритмы сортировки</h3>
+                            <p>Реализовать алгоритмы быстрой сортировки и сортировки слиянием</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Срок: 15.12.2023</span>
+                            <span class="status completed">Выполнено</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Задание 2: Веб-приложение</h3>
+                            <p>Создать простое веб-приложение с использованием HTML, CSS и JavaScript</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Срок: 20.12.2023</span>
+                            <span class="status pending">Ожидает проверки</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Задание 3: Базы данных</h3>
+                            <p>Спроектировать схему БД для системы управления курсами</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Срок: 25.12.2023</span>
+                            <span class="status pending">В процессе</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Задание 4: Тестирование</h3>
+                            <p>Написать unit-тесты для приложения</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Срок: 10.12.2023</span>
+                            <span class="status overdue">Просрочено</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Задание 5: Документация</h3>
+                            <p>Подготовить документацию к проекту</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Срок: 30.12.2023</span>
+                            <span class="status completed">Выполнено</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<!-- Скрипт для открытия/закрытия меню пользователя -->
-<script>
-  (function(){
-    const btn = document.getElementById('userToggle');
-    const menu = document.getElementById('userMenu');
-    if(!btn || !menu) return;
+            <!-- Вкладка "Оценки" -->
+            <div id="grades" class="tab-content">
+                <h1 class="title">Мои оценки</h1>
 
-    function closeMenu(){
-      menu.setAttribute('hidden','');
-      btn.setAttribute('aria-expanded','false');
-    }
-    function openMenu(){
-      menu.removeAttribute('hidden');
-      btn.setAttribute('aria-expanded','true');
-    }
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if(menu.hasAttribute('hidden')) openMenu(); else closeMenu();
-    });
-    // закрыть при клике вне меню
-    document.addEventListener('click', (e) => {
-      if(!menu.contains(e.target) && e.target !== btn) closeMenu();
-    });
-    // Esc закрывает
-    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
-  })();
-</script>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">4.5</div>
+                        <div class="stat-label">Средний балл</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Всего работ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Высший балл</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Успеваемость</div>
+                    </div>
+                </div>
 
+                <div class="tasks">
+                    <div class="task">
+                        <div>
+                            <h3>Математика — Контрольная работа</h3>
+                            <p>Тема: Производные и интегралы</p>
+                        </div>
+                        <span class="date" style="color: #3a5ed0; font-weight: 600;">92</span>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Алгоритмы — Домашняя работа</h3>
+                            <p>Задачи на динамическое программирование</p>
+                        </div>
+                        <span class="date" style="color: #3a5ed0; font-weight: 600;">85</span>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Веб-разработка — Лабораторная</h3>
+                            <p>Создание адаптивного сайта</p>
+                        </div>
+                        <span class="date" style="color: #3a5ed0; font-weight: 600;">88</span>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Базы данных — Проект</h3>
+                            <p>Проектирование схемы БД</p>
+                        </div>
+                        <span class="date" style="color: #3a5ed0; font-weight: 600;">95</span>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Английский — Эссе</h3>
+                            <p>Тема: Современные технологии</p>
+                        </div>
+                        <span class="date" style="color: #3a5ed0; font-weight: 600;">78</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Прогресс" -->
+            <div id="progress" class="tab-content">
+                <h1 class="title">Мой прогресс</h1>
+
+                <div class="form-container">
+                    <h3 style="margin-bottom: 16px;">Общая статистика</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <div>
+                            <h4 style="margin-bottom: 12px; color: #333;">Выполнение заданий</h4>
+                            <div style="background: #f0f2f8; border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span>Выполнено:</span>
+                                    <span style="font-weight: 600;">3/5 (60%)</span>
+                                </div>
+                                <div style="height: 8px; background: #e4e7f0; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 60%; background: #3a5ed0;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 12px; color: #333;">Средняя оценка</h4>
+                            <div style="background: #f0f2f8; border-radius: 8px; padding: 16px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; font-weight: 700; color: #3a5ed0;">4.5</div>
+                                    <div style="color: #666; font-size: 0.9rem;">из 5.0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 16px;">Прогресс по предметам</h3>
+                <div class="tasks">
+                    <div class="task">
+                        <div>
+                            <h3>Математика</h3>
+                            <p>Выполнено 8 из 10 заданий</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Средний балл: 4.2</span>
+                            <span class="status completed">80%</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Алгоритмы</h3>
+                            <p>Выполнено 6 из 8 заданий</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Средний балл: 4.5</span>
+                            <span class="status completed">75%</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Веб-разработка</h3>
+                            <p>Выполнено 5 из 6 заданий</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Средний балл: 4.8</span>
+                            <span class="status completed">83%</span>
+                        </div>
+                    </div>
+                    <div class="task">
+                        <div>
+                            <h3>Базы данных</h3>
+                            <p>Выполнено 4 из 5 заданий</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="date">Средний балл: 4.7</span>
+                            <span class="status completed">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Переключение вкладок
+        (function(){
+            const menu = document.querySelectorAll('.menu .menu-item');
+            const tabs = document.querySelectorAll('.tab-content');
+
+            function show(tabId){
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.id === tabId);
+                });
+
+                menu.forEach(m => {
+                    m.classList.toggle('active', m.dataset.tab === tabId);
+                });
+            }
+
+            menu.forEach(m => {
+                m.addEventListener('click', () => show(m.dataset.tab));
+            });
+
+            // Инициализация активной вкладки
+            const init = document.querySelector('.menu .menu-item.active');
+            if(init && init.dataset.tab) show(init.dataset.tab);
+        })();
+
+        // Скрипт для открытия/закрытия меню пользователя
+        (function(){
+            const btn = document.getElementById('userToggle');
+            const menu = document.getElementById('userMenu');
+            if(!btn || !menu) return;
+
+            function closeMenu(){
+                menu.setAttribute('hidden','');
+                btn.setAttribute('aria-expanded','false');
+            }
+
+            function openMenu(){
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded','true');
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(menu.hasAttribute('hidden')) openMenu();
+                else closeMenu();
+            });
+
+            // закрыть при клике вне меню
+            document.addEventListener('click', (e) => {
+                if(!menu.contains(e.target) && e.target !== btn) closeMenu();
+            });
+
+            // Esc закрывает
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') closeMenu();
+            });
+        })();
+    </script>
 </body>
 </html>
