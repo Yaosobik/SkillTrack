@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оценки - SkillTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f6f7fb;
+            color: #333;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Стили боковой панели */
+        .sidebar {
+            width: 240px;
+            background: #1a1a1a;
+            border-right: 1px solid #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            background-color: #3a5ed0;
+            border-radius: 6px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #ccc;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        .menu-item.active {
+            background-color: #3a5ed0;
+            color: white;
+        }
+
+        .user-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .user-block:hover {
+            background-color: #2d2d2d;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3a5ed0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-menu {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            top: auto;
+            background: #3a5ed0;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            min-width: 160px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+        }
+
+        .user-menu a {
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu[hidden] {
+            display: none;
+        }
+
+        /* Стили контента */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .grades-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3a5ed0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3a5ed0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2d4bb7;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .table th, .table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+        <h2 class="logo">
+            <div>
+                <img class="logo-img" src="../static/image/logo_home.png" alt="SkillTrack">
+            </div>
+            SkillTrack
+        </h2>
+        <nav class="menu">
+            <a class="menu-item" href="create-task.html">Создать новое задание</a>
+            <a class="menu-item" href="assign-tasks.html">Выдать задания</a>
+            <a class="menu-item" href="check-tasks.html">Проверка заданий</a>
+            <a class="menu-item active" href="grades.html">Оценки</a>
+        </nav>
+
+        <!-- Профиль внизу -->
+        <div class="user-block">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <button type="button" class="user-name" id="userToggle" aria-expanded="false">mdo ▾</button>
+                <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
+                    <a href="#" class="user-link" role="menuitem">Профиль</a>
+                    <a href="#" class="user-link" role="menuitem">Настройки</a>
+                    <a href="#" class="user-link logout" role="menuitem">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="content">
+        <div class="grades-header">
+            <h1 class="title">Оценки студентов</h1>
+            <button class="btn" id="add-grade-btn">Добавить оценки</button>
+        </div>
+
+        <div class="form-container">
+            <h3 style="margin-bottom: 16px;">Фильтры</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="grade-group">Группа</label>
+                    <select id="grade-group" class="form-control">
+                        <option value="">Все группы</option>
+                        <option value="group1">Группа 1: Веб-разработка</option>
+                        <option value="group2">Группа 2: Алгоритмы</option>
+                        <option value="group3">Группа 3: Базы данных</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="grade-task">Задание</label>
+                    <select id="grade-task" class="form-control">
+                        <option value="">Все задания</option>
+                        <option value="task1">Алгоритмы сортировки</option>
+                        <option value="task2">Веб-приложение</option>
+                        <option value="task3">Базы данных</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Студент</th>
+                    <th>Группа</th>
+                    <th>Задание</th>
+                    <th>Оценка</th>
+                    <th>Дата сдачи</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Иванов А.</td>
+                    <td>Группа 1</td>
+                    <td>Алгоритмы сортировки</td>
+                    <td>92/100</td>
+                    <td>10.12.2023</td>
+                    <td><button class="btn" style="padding: 6px 12px;" onclick="editGrade(1)">Изменить</button></td>
+                </tr>
+                <tr>
+                    <td>Петрова М.</td>
+                    <td>Группа 2</td>
+                    <td>Веб-приложение</td>
+                    <td>85/100</td>
+                    <td>12.12.2023</td>
+                    <td><button class="btn" style="padding: 6px 12px;" onclick="editGrade(2)">Изменить</button></td>
+                </tr>
+                <tr>
+                    <td>Сидоров П.</td>
+                    <td>Группа 1</td>
+                    <td>Алгоритмы сортировки</td>
+                    <td>78/100</td>
+                    <td>09.12.2023</td>
+                    <td><button class="btn" style="padding: 6px 12px;" onclick="editGrade(3)">Изменить</button></td>
+                </tr>
+                <tr>
+                    <td>Козлова Е.</td>
+                    <td>Группа 3</td>
+                    <td>Базы данных</td>
+                    <td>95/100</td>
+                    <td>14.12.2023</td>
+                    <td><button class="btn" style="padding: 6px 12px;" onclick="editGrade(4)">Изменить</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Модальное окно для добавления оценки -->
+    <div class="modal" id="add-grade-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Добавить оценку</h2>
+                <button class="modal-close" id="close-grade-modal">&times;</button>
+            </div>
+            <form id="add-grade-form">
+                <div class="form-group">
+                    <label for="student-select">Студент</label>
+                    <select id="student-select" class="form-control" required>
+                        <option value="">Выберите студента</option>
+                        <option value="1">Иванов А.</option>
+                        <option value="2">Петрова М.</option>
+                        <option value="3">Сидоров П.</option>
+                        <option value="4">Козлова Е.</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="task-select">Задание</label>
+                    <select id="task-select" class="form-control" required>
+                        <option value="">Выберите задание</option>
+                        <option value="1">Алгоритмы сортировки</option>
+                        <option value="2">Веб-приложение</option>
+                        <option value="3">Базы данных</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="grade-value">Оценка (0-100)</label>
+                    <input type="number" id="grade-value" class="form-control" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade-comment">Комментарий</label>
+                    <textarea id="grade-comment" class="form-control" rows="3" placeholder="Добавьте комментарий к оценке (необязательно)"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-grade">Отмена</button>
+                    <button type="submit" class="btn">Сохранить оценку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Меню пользователя
+        (function(){
+            const btn = document.getElementById('userToggle');
+            const menu = document.getElementById('userMenu');
+            if(!btn || !menu) return;
+
+            function closeMenu(){
+                menu.setAttribute('hidden','');
+                btn.setAttribute('aria-expanded','false');
+            }
+
+            function openMenu(){
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded','true');
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(menu.hasAttribute('hidden')) openMenu();
+                else closeMenu();
+            });
+
+            document.addEventListener('click', (e) => {
+                if(!menu.contains(e.target) && e.target !== btn) closeMenu();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') closeMenu();
+            });
+        })();
+
+        // Модальное окно для добавления оценки
+        const addGradeBtn = document.getElementById('add-grade-btn');
+        const addGradeModal = document.getElementById('add-grade-modal');
+        const closeGradeModal = document.getElementById('close-grade-modal');
+        const cancelGrade = document.getElementById('cancel-grade');
+        const addGradeForm = document.getElementById('add-grade-form');
+
+        // Открытие модального окна
+        if (addGradeBtn) {
+            addGradeBtn.addEventListener('click', function() {
+                addGradeModal.classList.add('active');
+            });
+        }
+
+        // Закрытие модального окна
+        function closeGradeModalFunc() {
+            addGradeModal.classList.remove('active');
+            addGradeForm.reset();
+        }
+
+        if (closeGradeModal) {
+            closeGradeModal.addEventListener('click', closeGradeModalFunc);
+        }
+
+        if (cancelGrade) {
+            cancelGrade.addEventListener('click', closeGradeModalFunc);
+        }
+
+        // Закрытие по клику вне модального окна
+        addGradeModal.addEventListener('click', function(e) {
+            if (e.target === addGradeModal) {
+                closeGradeModalFunc();
+            }
+        });
+
+        // Обработка отправки формы
+        if (addGradeForm) {
+            addGradeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const studentSelect = document.getElementById('student-select');
+                const taskSelect = document.getElementById('task-select');
+                const gradeValue = document.getElementById('grade-value').value;
+                const gradeComment = document.getElementById('grade-comment').value;
+
+                const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+                const taskName = taskSelect.options[taskSelect.selectedIndex].text;
+
+                alert(`Оценка ${gradeValue} добавлена для студента ${studentName} по заданию "${taskName}"`);
+
+                closeGradeModalFunc();
+            });
+        }
+
+        function editGrade(gradeId) {
+            alert('Редактирование оценки ' + gradeId + ' (функционал в разработке)');
+        }
+
+        // Фильтрация таблицы
+        document.getElementById('grade-group').addEventListener('change', filterTable);
+        document.getElementById('grade-task').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const groupFilter = document.getElementById('grade-group').value;
+            const taskFilter = document.getElementById('grade-task').value;
+            
+            // В реальном приложении здесь будет фильтрация данных
+            console.log('Фильтры: Группа -', groupFilter, 'Задание -', taskFilter);
+        }
+    </script>
+</body>
+</html>

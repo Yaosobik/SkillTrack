@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать задание - SkillTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f6f7fb;
+            color: #333;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Стили боковой панели */
+        .sidebar {
+            width: 240px;
+            background: #1a1a1a;
+            border-right: 1px solid #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            background-color: #3a5ed0;
+            border-radius: 6px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #ccc;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        .menu-item.active {
+            background-color: #3a5ed0;
+            color: white;
+        }
+
+        .user-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .user-block:hover {
+            background-color: #2d2d2d;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3a5ed0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-menu {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            top: auto;
+            background: #3a5ed0;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            min-width: 160px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+        }
+
+        .user-menu a {
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu[hidden] {
+            display: none;
+        }
+
+        /* Стили контента */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3a5ed0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3a5ed0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2d4bb7;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .file-upload:hover {
+            border-color: #3a5ed0;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .upload-text {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .file-list {
+            margin-top: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+        <h2 class="logo">
+            <div>
+                <img class="logo-img" src="../static/image/logo_home.png" alt="SkillTrack">
+            </div>
+            SkillTrack
+        </h2>
+        <nav class="menu">
+            <a class="menu-item active" href="create-task.html">Создать новое задание</a>
+            <a class="menu-item" href="assign-tasks.html">Выдать задания</a>
+            <a class="menu-item" href="check-tasks.html">Проверка заданий</a>
+            <a class="menu-item" href="grades.html">Оценки</a>
+        </nav>
+
+        <!-- Профиль внизу -->
+        <div class="user-block">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <button type="button" class="user-name" id="userToggle" aria-expanded="false">mdo ▾</button>
+                <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
+                    <a href="#" class="user-link" role="menuitem">Профиль</a>
+                    <a href="#" class="user-link" role="menuitem">Настройки</a>
+                    <a href="#" class="user-link logout" role="menuitem">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="content">
+        <h1 class="title">Создать новое задание</h1>
+
+        <div class="form-container">
+            <!-- форма: добавлены name у полей и enctype для файлов -->
+            <form id="create-task-form" enctype="multipart/form-data" method="post">
+                <div class="form-group">
+                    <label for="task-title">Название задания</label>
+                    <input type="text" id="task-title" name="topic" class="form-control" placeholder="Введите название задания" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-description">Описание задания</label>
+                    <textarea id="task-description" name="task" class="form-control" rows="6" placeholder="Опишите задание подробно, укажите требования и критерии оценки" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-group">Выберите группу</label>
+                        <select id="task-group" name="group" class="form-control" required>
+                            <option value="">Выберите группу</option>
+                            <option value="group1">Группа 1: Веб-разработка</option>
+                            <option value="group2">Группа 2: Алгоритмы</option>
+                            <option value="group3">Группа 3: Базы данных</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-deadline">Срок выполнения</label>
+                        <input type="date" id="task-deadline" name="deadline" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-max-score">Максимальный балл</label>
+                    <input type="number" id="task-max-score" name="max_score" class="form-control" placeholder="100" min="1" max="100" value="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Прикрепленные файлы (опционально)</label>
+                    <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                        <div class="upload-text">📎 Нажмите для загрузки файлов</div>
+                        <div class="upload-hint">Максимальный размер файла: 10MB</div>
+                        <input type="file" id="file-input" name="files" multiple>
+                    </div>
+                    <div id="file-list" class="file-list"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="allow-late" name="allow_late" style="margin-right: 8px;">
+                        Разрешить сдачу после дедлайна
+                    </label>
+                </div>
+
+                <!-- основная кнопка теперь отправляет fetch на /task/create -->
+                <button type="submit" class="btn">Создать задание</button>
+                <a href="{{ url_for('task.create_topic') }}" class="btn" style="margin-left:8px;">Выгрузить задание</a>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Меню пользователя (без изменений)
+        (function(){
+            const btn = document.getElementById('userToggle');
+            const menu = document.getElementById('userMenu');
+            if(!btn || !menu) return;
+            function closeMenu(){ menu.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); }
+            function openMenu(){ menu.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); }
+            btn.addEventListener('click', (e) => { e.stopPropagation(); if(menu.hasAttribute('hidden')) openMenu(); else closeMenu(); });
+            document.addEventListener('click', (e) => { if(!menu.contains(e.target) && e.target !== btn) closeMenu(); });
+            document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
+        })();
+
+        // обработка формы — отправка через fetch на маршрут task.create_topic
+        document.getElementById('create-task-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const url = "{{ url_for('task.create_topic') }}";
+
+            submitBtn.disabled = true;
+            const oldText = submitBtn.textContent;
+            submitBtn.textContent = 'Отправка...';
+
+            const fd = new FormData(form);
+
+            // отправляем POST, Flask-роут должен принимать form-data
+            try {
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    body: fd,
+                    credentials: 'same-origin'
+                });
+
+                if (resp.redirected) {
+                    window.location.href = resp.url;
+                    return;
+                }
+
+                if (resp.ok) {
+                    // успешное сохранение — ожидаем, что сервер вернёт 200/201
+                    alert('Задание успешно создано');
+                    form.reset();
+                    document.getElementById('file-list').innerHTML = '';
+                } else {
+                    const text = await resp.text();
+                    alert('Ошибка при отправке: ' + resp.status + '\n' + text);
+                }
+            } catch (err) {
+                alert('Сетевая ошибка: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = oldText;
+            }
+        });
+
+        // обработка списка файлов (без изменений)
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `<span>📄 ${file.name}</span><small>(${(file.size / 1024 / 1024).toFixed(2)} MB)</small>`;
+                fileList.appendChild(fileItem);
+            });
+        });
+
+        // Установка минимальной даты как сегодня
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('task-deadline').min = today;
+    </script>
+</body>
+</html>

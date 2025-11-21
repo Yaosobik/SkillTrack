@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка заданий - SkillTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f6f7fb;
+            color: #333;
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Стили боковой панели */
+        .sidebar {
+            width: 240px;
+            background: #1a1a1a;
+            border-right: 1px solid #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            background-color: #3a5ed0;
+            border-radius: 6px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #ccc;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #2d2d2d;
+            color: #fff;
+        }
+
+        .menu-item.active {
+            background-color: #3a5ed0;
+            color: white;
+        }
+
+        .user-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .user-block:hover {
+            background-color: #2d2d2d;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #3a5ed0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-menu {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            top: auto;
+            background: #3a5ed0;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            min-width: 160px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+        }
+
+        .user-menu a {
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu[hidden] {
+            display: none;
+        }
+
+        /* Стили контента */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .task:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .task.selected {
+            border-color: #3a5ed0;
+            background-color: #f8f9ff;
+        }
+
+        .status-pending {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .status-graded {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .detail-view {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .detail-meta {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .submission-section {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .grade-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e4e7f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3a5ed0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2d4bb7;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-small {
+            padding: 4px 12px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+        <h2 class="logo">
+            <div>
+                <img class="logo-img" src="../static/image/logo_home.png" alt="SkillTrack">
+            </div>
+            SkillTrack
+        </h2>
+        <nav class="menu">
+            <a class="menu-item" href="create-task.html">Создать новое задание</a>
+            <a class="menu-item" href="assign-tasks.html">Выдать задания</a>
+            <a class="menu-item active" href="check-tasks.html">Проверка заданий</a>
+            <a class="menu-item" href="grades.html">Оценки</a>
+        </nav>
+
+        <!-- Профиль внизу -->
+        <div class="user-block">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <button type="button" class="user-name" id="userToggle" aria-expanded="false">mdo ▾</button>
+                <div class="user-menu" id="userMenu" hidden role="menu" aria-labelledby="userToggle">
+                    <a href="#" class="user-link" role="menuitem">Профиль</a>
+                    <a href="#" class="user-link" role="menuitem">Настройки</a>
+                    <a href="#" class="user-link logout" role="menuitem">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="content">
+        <h1 class="title">Проверка заданий</h1>
+
+        <div class="tasks">
+            <div class="task selected" data-submission="1">
+                <div style="flex: 1;">
+                    <h3>Иванов А. — Алгоритмы сортировки</h3>
+                    <p>Ожидает проверки</p>
+                </div>
+                <span class="date status-pending">10.12.2023</span>
+            </div>
+            <div class="task" data-submission="2">
+                <div style="flex: 1;">
+                    <h3>Петрова М. — Веб-приложение</h3>
+                    <p>Ожидает проверки</p>
+                </div>
+                <span class="date status-pending">12.12.2023</span>
+            </div>
+            <div class="task" data-submission="3">
+                <div style="flex: 1;">
+                    <h3>Сидоров П. — Алгоритмы сортировки</h3>
+                    <p>Проверено (85 баллов)</p>
+                </div>
+                <span class="date status-graded">09.12.2023</span>
+            </div>
+            <div class="task" data-submission="4">
+                <div style="flex: 1;">
+                    <h3>Козлова Е. — Базы данных</h3>
+                    <p>Ожидает проверки</p>
+                </div>
+                <span class="date status-pending">14.12.2023</span>
+            </div>
+        </div>
+
+        <!-- Детальный просмотр сданной работы -->
+        <div id="submission-detail" class="detail-view hidden">
+            <div class="detail-header">
+                <div>
+                    <h2 class="detail-title" id="detail-submission-title">Иванов А. — Алгоритмы сортировки</h2>
+                    <div class="detail-meta">
+                        <span id="detail-submission-date">Сдано: 10.12.2023</span> •
+                        <span id="detail-submission-status" class="status-pending">Статус: Ожидает проверки</span>
+                    </div>
+                </div>
+                <button class="back-btn" onclick="backToSubmissionList()">
+                    <span>←</span>
+                    Назад к списку
+                </button>
+            </div>
+
+            <div class="detail-content">
+                <div class="submission-section">
+                    <div class="submission-header">
+                        <h3>Работа студента</h3>
+                        <div>
+                            <input type="number" class="grade-input" placeholder="Оценка" min="0" max="100" value="92">
+                            <button class="btn" style="margin-left: 8px;" onclick="saveGrade()">Сохранить оценку</button>
+                        </div>
+                    </div>
+
+                    <div class="file-list">
+                        <div class="file-item">
+                            <span class="file-icon">📄</span>
+                            <span>sorting_algorithms.py</span>
+                            <button class="btn btn-small" style="margin-left: auto;">Скачать</button>
+                        </div>
+                        <div class="file-item">
+                            <span class="file-icon">📄</span>
+                            <span>test_results.pdf</span>
+                            <button class="btn btn-small" style="margin-left: auto;">Скачать</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3 style="margin-bottom: 12px;">Комментарий студента</h3>
+                    <p style="color: #666; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                        Реализовал оба алгоритма сортировки. Добавил сравнительный анализ производительности.
+                        Временная сложность соответствует ожиданиям.
+                    </p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3 style="margin-bottom: 12px;">Комментарий преподавателя</h3>
+                    <textarea class="comment-input" placeholder="Введите ваш комментарий...">Отличная работа! Код хорошо структурирован и содержит подробные комментарии.</textarea>
+                    <button class="btn" style="margin-top: 12px;">Отправить комментарий</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Меню пользователя
+        (function(){
+            const btn = document.getElementById('userToggle');
+            const menu = document.getElementById('userMenu');
+            if(!btn || !menu) return;
+
+            function closeMenu(){
+                menu.setAttribute('hidden','');
+                btn.setAttribute('aria-expanded','false');
+            }
+
+            function openMenu(){
+                menu.removeAttribute('hidden');
+                btn.setAttribute('aria-expanded','true');
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(menu.hasAttribute('hidden')) openMenu();
+                else closeMenu();
+            });
+
+            document.addEventListener('click', (e) => {
+                if(!menu.contains(e.target) && e.target !== btn) closeMenu();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') closeMenu();
+            });
+        })();
+
+        // Обработка кликов по работам
+        document.addEventListener('DOMContentLoaded', function() {
+            const submissionList = document.querySelector('.tasks');
+            const submissionDetail = document.getElementById('submission-detail');
+
+            if (submissionList) {
+                submissionList.addEventListener('click', function(e) {
+                    const submission = e.target.closest('.task');
+                    if (submission && submission.dataset.submission) {
+                        // Скрываем список и показываем детали
+                        submissionList.style.display = 'none';
+                        submissionDetail.classList.remove('hidden');
+
+                        // Заполняем данные работы
+                        const submissionId = submission.dataset.submission;
+                        console.log('Открыта работа:', submissionId);
+                    }
+                });
+            }
+        });
+
+        function backToSubmissionList() {
+            document.getElementById('submission-detail').classList.add('hidden');
+            document.querySelector('.tasks').style.display = 'flex';
+        }
+
+        function saveGrade() {
+            const gradeInput = document.querySelector('.grade-input');
+            alert('Оценка ' + gradeInput.value + ' сохранена!');
+        }
+    </script>
+</body>
+</html>

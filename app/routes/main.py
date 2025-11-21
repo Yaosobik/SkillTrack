@@ -43,6 +43,16 @@ def grades():
     return render_template("home_student.html")
 
 
-@main.route("/home/teacher")
-def teacher_home():
-    return render_template("home_teacher.html")
+@main.route("/home/teacher/check")
+def teacher_home_check():
+    return render_template("home_teacher_check_tasks.html")
+
+
+@main.route("/home/teacher/create")
+def teacher_create():
+    return render_template("home_teacher_send_task.html")
+
+
+@main.route("/home/teacher/grades")
+def teacher_grades():
+    return render_template("home_teacher_grades.html")
