@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <title>{{ task.topic or 'Задание' }}</title>
+  <style>
+    .container { max-width:900px; margin:32px auto; padding:16px; }
+    .card { background:#fff;padding:20px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    textarea { width:100%; min-height:160px; padding:10px; border-radius:8px; border:1px solid #ddd; }
+    .btn { padding:10px 16px; background:#3a5ed0; color:#fff; border-radius:8px; text-decoration:none; display:inline-block; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('main.grades') }}" class="btn btn-secondary" style="margin-bottom:16px;">← Назад</a>
+
+    <div class="card">
+      <h2>{{ task.topic or 'Без темы' }}</h2>
+      <p>{{ task.task or '' }}</p>
+      <p><strong>Срок:</strong> {{ task.deadline.strftime('%d.%m.%Y') if task.deadline else '—' }}</p>
+
+      <hr>
+
+      <form action="{{ url_for('task.submit_answer', task_id=task.id) }}" method="post">
+        <!-- если есть система пользователей, email можно подставлять из сессии -->
+        <div style="margin-bottom:12px;">
+          <label>Ваш email (опционально)</label><br>
+          <input type="email" name="email" class="form-control" style="width:100%; padding:8px; margin-top:6px;">
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label>Ответ</label><br>
+          <textarea name="answer" required placeholder="Напишите ваше решение или вставьте ссылку на репозиторий"></textarea>
+        </div>
+
+        <button type="submit" class="btn">Отправить ответ</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

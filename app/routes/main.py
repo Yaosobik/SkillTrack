@@ -47,7 +47,11 @@ def grades():
 
 @main.route("/home/teacher/check")
 def teacher_home_check():
-    return render_template("home_teacher_check_tasks.html")
+    # ленивый импорт модели Submission, чтобы избежать проблем при импортах
+    from ..models.submission import Submission
+
+    submissions = Submission.query.order_by(Submission.submitted_at.desc()).all()
+    return render_template("home_teacher_check_tasks.html", submissions=submissions)
 
 
 @main.route("/home/teacher/create")

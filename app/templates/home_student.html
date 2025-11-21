@@ -361,16 +361,18 @@
 
                 <div class="tasks">
                     {% for t in tasks %}
-                    <div class="task {% if loop.first %}selected{% endif %}">
-                        <div>
-                            <h3>{{ t.topic or 'Без темы' }}</h3>
-                            <p>{{ t.task or '' }}</p>
+                    <a href="{{ url_for('task.view_task', task_id=t.id) }}" class="task-link" style="text-decoration:none; color:inherit;">
+                        <div class="task {% if loop.first %}selected{% endif %}">
+                            <div>
+                                <h3>{{ t.topic or 'Без темы' }}</h3>
+                                <p>{{ t.task or '' }}</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span class="date">Срок: {{ t.deadline.strftime('%d.%m.%Y') if t.deadline else '—' }}</span>
+                                <span class="status pending">Ожидает проверки</span>
+                            </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: {{ t.deadline.strftime('%d.%m.%Y') if t.deadline else '—' }}</span>
-                            <span class="status pending">Ожидает проверки</span>
-                        </div>
-                    </div>
+                    </a>
                     {% else %}
                     <div class="task">
                         <div>
