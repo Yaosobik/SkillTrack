@@ -258,6 +258,11 @@
             border-color: #3a5ed0;
         }
 
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -322,6 +327,123 @@
         .tab-content.active {
             display: block;
         }
+
+        /* Стили для детального просмотра задания */
+        .task-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .task-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #3a5ed0;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 8px 0;
+        }
+
+        .back-btn:hover {
+            color: #2d4bb7;
+        }
+
+        .file-upload {
+            margin-top: 16px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .file-upload:hover {
+            border-color: #3a5ed0;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 16px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-remove {
+            color: #dc3545;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        .submission-status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .submission-status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .submission-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -359,8 +481,9 @@
             <div id="tasks" class="tab-content active">
                 <h1 class="title">Мои задания</h1>
 
-                <div class="tasks">
-                    <div class="task selected">
+                <!-- Список заданий -->
+                <div id="tasks-list" class="tasks">
+                    <div class="task selected" data-task-id="1">
                         <div>
                             <h3>Задание 1: Алгоритмы сортировки</h3>
                             <p>Реализовать алгоритмы быстрой сортировки и сортировки слиянием</p>
@@ -370,7 +493,7 @@
                             <span class="status completed">Выполнено</span>
                         </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task-id="2">
                         <div>
                             <h3>Задание 2: Веб-приложение</h3>
                             <p>Создать простое веб-приложение с использованием HTML, CSS и JavaScript</p>
@@ -380,7 +503,7 @@
                             <span class="status pending">Ожидает проверки</span>
                         </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task-id="3">
                         <div>
                             <h3>Задание 3: Базы данных</h3>
                             <p>Спроектировать схему БД для системы управления курсами</p>
@@ -390,7 +513,7 @@
                             <span class="status pending">В процессе</span>
                         </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task-id="4">
                         <div>
                             <h3>Задание 4: Тестирование</h3>
                             <p>Написать unit-тесты для приложения</p>
@@ -400,7 +523,7 @@
                             <span class="status overdue">Просрочено</span>
                         </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task-id="5">
                         <div>
                             <h3>Задание 5: Документация</h3>
                             <p>Подготовить документацию к проекту</p>
@@ -409,6 +532,52 @@
                             <span class="date">Срок: 30.12.2023</span>
                             <span class="status completed">Выполнено</span>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Детальный просмотр задания -->
+                <div id="task-detail" class="task-detail" style="display: none;">
+                    <button class="back-btn" id="back-to-list">
+                        ← Назад к списку заданий
+                    </button>
+
+                    <div class="task-header">
+                        <div>
+                            <h2 class="task-title" id="detail-title">Задание 1: Алгоритмы сортировки</h2>
+                            <div class="task-meta">
+                                <span class="date" id="detail-date">Срок: 15.12.2023</span>
+                                <span class="status completed" id="detail-status">Выполнено</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="task-description" id="detail-description">
+                        Реализовать алгоритмы быстрой сортировки и сортировки слиянием.
+                        Необходимо написать код на языке Python, который демонстрирует работу обоих алгоритмов
+                        на примере массива из 10 случайных чисел. Код должен быть хорошо документирован и
+                        содержать комментарии, объясняющие каждый шаг алгоритма.
+                    </div>
+
+                    <div class="form-container">
+                        <h3 style="margin-bottom: 16px;">Ответ на задание</h3>
+
+                        <div class="form-group">
+                            <label for="task-answer">Текстовый ответ</label>
+                            <textarea id="task-answer" class="form-control" placeholder="Напишите ваш ответ здесь..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Прикрепить файлы</label>
+                            <div class="file-upload" id="file-upload-area">
+                                <p>Перетащите файлы сюда или нажмите для выбора</p>
+                                <input type="file" id="file-input" multiple>
+                            </div>
+                            <div class="file-list" id="file-list"></div>
+                        </div>
+
+                        <button class="btn" id="submit-task">Отправить ответ</button>
+
+                        <div class="submission-status" id="submission-status"></div>
                     </div>
                 </div>
             </div>
@@ -590,6 +759,192 @@
             document.addEventListener('keydown', (e) => {
                 if(e.key === 'Escape') closeMenu();
             });
+        })();
+
+        // Функциональность просмотра и выполнения заданий
+        (function() {
+            const tasksList = document.getElementById('tasks-list');
+            const taskDetail = document.getElementById('task-detail');
+            const backButton = document.getElementById('back-to-list');
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileInput = document.getElementById('file-input');
+            const fileList = document.getElementById('file-list');
+            const submitButton = document.getElementById('submit-task');
+            const submissionStatus = document.getElementById('submission-status');
+
+            // Данные заданий (в реальном приложении это будет приходить с сервера)
+            const tasksData = {
+                1: {
+                    title: "Задание 1: Алгоритмы сортировки",
+                    description: "Реализовать алгоритмы быстрой сортировки и сортировки слиянием. Необходимо написать код на языке Python, который демонстрирует работу обоих алгоритмов на примере массива из 10 случайных чисел. Код должен быть хорошо документирован и содержать комментарии, объясняющие каждый шаг алгоритма.",
+                    deadline: "15.12.2023",
+                    status: "completed"
+                },
+                2: {
+                    title: "Задание 2: Веб-приложение",
+                    description: "Создать простое веб-приложение с использованием HTML, CSS и JavaScript. Приложение должно включать в себя интерактивные элементы, такие как кнопки, формы и динамическое изменение контента. Код должен быть структурирован и содержать комментарии.",
+                    deadline: "20.12.2023",
+                    status: "pending"
+                },
+                3: {
+                    title: "Задание 3: Базы данных",
+                    description: "Спроектировать схему БД для системы управления курсами. Схема должна включать таблицы для студентов, преподавателей, курсов, заданий и оценок. Предоставить SQL-скрипт для создания таблиц и примеры запросов для основных операций.",
+                    deadline: "25.12.2023",
+                    status: "pending"
+                },
+                4: {
+                    title: "Задание 4: Тестирование",
+                    description: "Написать unit-тесты для приложения. Тесты должны покрывать основные функциональные модули приложения и проверять корректность работы в различных сценариях. Использовать любой популярный фреймворк для тестирования.",
+                    deadline: "10.12.2023",
+                    status: "overdue"
+                },
+                5: {
+                    title: "Задание 5: Документация",
+                    description: "Подготовить документацию к проекту. Документация должна включать описание архитектуры приложения, инструкции по установке и настройке, руководство пользователя и API-документацию (если применимо).",
+                    deadline: "30.12.2023",
+                    status: "completed"
+                }
+            };
+
+            // Обработчики кликов по заданиям
+            document.querySelectorAll('.task').forEach(task => {
+                task.addEventListener('click', function() {
+                    const taskId = this.getAttribute('data-task-id');
+                    showTaskDetail(taskId);
+                });
+            });
+
+            // Кнопка "Назад"
+            backButton.addEventListener('click', function() {
+                showTasksList();
+            });
+
+            // Загрузка файлов
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#3a5ed0';
+            });
+
+            fileUploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = '#ddd';
+            });
+
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ddd';
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+
+            // Отправка ответа
+            submitButton.addEventListener('click', function() {
+                const answerText = document.getElementById('task-answer').value;
+                const files = Array.from(fileList.querySelectorAll('.file-item')).map(item =>
+                    item.querySelector('.file-name span').textContent
+                );
+
+                if (!answerText.trim() && files.length === 0) {
+                    showSubmissionStatus('error', 'Пожалуйста, напишите ответ или прикрепите файл');
+                    return;
+                }
+
+                // В реальном приложении здесь будет отправка данных на сервер
+                showSubmissionStatus('success', 'Ваш ответ успешно отправлен!');
+
+                // Очистка формы через некоторое время
+                setTimeout(() => {
+                    document.getElementById('task-answer').value = '';
+                    fileList.innerHTML = '';
+                }, 3000);
+            });
+
+            // Функции для работы с файлами
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    addFileToList(file);
+                }
+            }
+
+            function addFileToList(file) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+
+                fileItem.innerHTML = `
+                    <div class="file-name">
+                        <span>${file.name}</span>
+                    </div>
+                    <button class="file-remove" type="button">×</button>
+                `;
+
+                fileList.appendChild(fileItem);
+
+                // Обработчик удаления файла
+                fileItem.querySelector('.file-remove').addEventListener('click', function() {
+                    fileList.removeChild(fileItem);
+                });
+            }
+
+            // Функции показа/скрытия деталей задания
+            function showTaskDetail(taskId) {
+                const taskData = tasksData[taskId];
+
+                if (!taskData) return;
+
+                // Заполнение данных
+                document.getElementById('detail-title').textContent = taskData.title;
+                document.getElementById('detail-description').textContent = taskData.description;
+                document.getElementById('detail-date').textContent = `Срок: ${taskData.deadline}`;
+
+                // Обновление статуса
+                const statusElement = document.getElementById('detail-status');
+                statusElement.textContent = getStatusText(taskData.status);
+                statusElement.className = 'status ' + getStatusClass(taskData.status);
+
+                // Показ деталей задания
+                tasksList.style.display = 'none';
+                taskDetail.style.display = 'block';
+
+                // Очистка формы
+                document.getElementById('task-answer').value = '';
+                fileList.innerHTML = '';
+                submissionStatus.className = 'submission-status';
+            }
+
+            function showTasksList() {
+                taskDetail.style.display = 'none';
+                tasksList.style.display = 'flex';
+            }
+
+            function getStatusText(status) {
+                switch(status) {
+                    case 'completed': return 'Выполнено';
+                    case 'pending': return 'В процессе';
+                    case 'overdue': return 'Просрочено';
+                    default: return '';
+                }
+            }
+
+            function getStatusClass(status) {
+                switch(status) {
+                    case 'completed': return 'completed';
+                    case 'pending': return 'pending';
+                    case 'overdue': return 'overdue';
+                    default: return '';
+                }
+            }
+
+            function showSubmissionStatus(type, message) {
+                submissionStatus.textContent = message;
+                submissionStatus.className = 'submission-status ' + type;
+            }
         })();
     </script>
 </body>

@@ -273,6 +273,15 @@
             background: #e4e7f0;
         }
 
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
         /* Таблицы */
         .table {
             width: 100%;
@@ -830,26 +839,104 @@
 
                 <h3 style="margin-bottom: 16px;">Мои группы</h3>
                 <div class="tasks">
-                    <div class="task">
+                    <div class="task" data-group="1">
                         <div>
                             <h3>Группа 1: Веб-разработка</h3>
                             <p>Студенты курса по веб-разработке</p>
                         </div>
-                        <span class="date">12 студентов</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="date">12 студентов</span>
+                            <button class="btn edit-group-btn" style="padding: 6px 12px; font-size: 0.9rem;">Редактировать</button>
+                        </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-group="2">
                         <div>
                             <h3>Группа 2: Алгоритмы</h3>
                             <p>Студенты курса по алгоритмам и структурам данных</p>
                         </div>
-                        <span class="date">15 студентов</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="date">15 студентов</span>
+                            <button class="btn edit-group-btn" style="padding: 6px 12px; font-size: 0.9rem;">Редактировать</button>
+                        </div>
                     </div>
-                    <div class="task">
+                    <div class="task" data-group="3">
                         <div>
                             <h3>Группа 3: Базы данных</h3>
                             <p>Студенты курса по проектированию баз данных</p>
                         </div>
-                        <span class="date">10 студентов</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="date">10 студентов</span>
+                            <button class="btn edit-group-btn" style="padding: 6px 12px; font-size: 0.9rem;">Редактировать</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Детальный просмотр группы -->
+                <div id="group-detail" class="detail-view hidden">
+                    <div class="detail-header">
+                        <div>
+                            <h2 class="detail-title" id="detail-group-title">Группа 1: Веб-разработка</h2>
+                            <div class="detail-meta">
+                                <span id="detail-group-students">12 студентов</span>
+                            </div>
+                        </div>
+                        <button class="back-btn" id="back-from-group">
+                            <span>←</span>
+                            Назад к списку
+                        </button>
+                    </div>
+
+                    <div class="detail-content">
+                        <div class="form-container">
+                            <h3 style="margin-bottom: 16px;">Редактирование группы</h3>
+                            <div class="form-group">
+                                <label for="edit-group-name">Название группы</label>
+                                <input type="text" id="edit-group-name" class="form-control" value="Группа 1: Веб-разработка">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-group-description">Описание группы</label>
+                                <textarea id="edit-group-description" class="form-control" rows="3">Студенты курса по веб-разработке</textarea>
+                            </div>
+                            <button class="btn">Сохранить изменения</button>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h3 style="margin: 0;">Список студентов</h3>
+                                <button class="btn" id="add-student-btn" style="padding: 8px 16px;">Добавить студента</button>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ФИО</th>
+                                        <th>Email</th>
+                                        <th>Дата добавления</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Иванов Алексей</td>
+                                        <td>ivanov@example.com</td>
+                                        <td>01.09.2023</td>
+                                        <td><button class="btn btn-danger" style="padding: 6px 12px;">Удалить</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Петрова Мария</td>
+                                        <td>petrova@example.com</td>
+                                        <td>01.09.2023</td>
+                                        <td><button class="btn btn-danger" style="padding: 6px 12px;">Удалить</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Сидоров Петр</td>
+                                        <td>sidorov@example.com</td>
+                                        <td>02.09.2023</td>
+                                        <td><button class="btn btn-danger" style="padding: 6px 12px;">Удалить</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1089,6 +1176,70 @@
                     // Здесь можно добавить обновление таблицы с оценками
                 });
             }
+
+            // Функционал редактирования групп
+            const groupList = document.querySelector('#groups .tasks');
+            const groupDetail = document.getElementById('group-detail');
+            const backFromGroup = document.getElementById('back-from-group');
+            const addStudentBtn = document.getElementById('add-student-btn');
+
+            // Обработка кликов по группам
+            if (groupList) {
+                groupList.addEventListener('click', function(e) {
+                    const editBtn = e.target.closest('.edit-group-btn');
+                    if (editBtn) {
+                        const group = editBtn.closest('.task');
+                        if (group && group.dataset.group) {
+                            // Скрываем список групп и показываем детали
+                            groupList.style.display = 'none';
+                            document.querySelector('#groups .form-container').style.display = 'none';
+                            document.querySelector('#groups h3').style.display = 'none';
+                            groupDetail.classList.remove('hidden');
+
+                            // Заполняем данные группы (в реальном приложении - запрос к API)
+                            const groupId = group.dataset.group;
+                            // Здесь можно добавить логику загрузки данных группы
+                        }
+                    }
+                });
+            }
+
+            // Кнопка "Назад" для групп
+            if (backFromGroup) {
+                backFromGroup.addEventListener('click', function() {
+                    groupDetail.classList.add('hidden');
+                    groupList.style.display = 'flex';
+                    document.querySelector('#groups .form-container').style.display = 'block';
+                    document.querySelector('#groups h3').style.display = 'block';
+                });
+            }
+
+            // Кнопка добавления студента
+            if (addStudentBtn) {
+                addStudentBtn.addEventListener('click', function() {
+                    // В реальном приложении здесь будет модальное окно или форма для добавления студента
+                    const studentName = prompt("Введите ФИО студента:");
+                    const studentEmail = prompt("Введите email студента:");
+
+                    if (studentName && studentEmail) {
+                        alert(`Студент ${studentName} (${studentEmail}) добавлен в группу`);
+                        // Здесь будет код для добавления студента в таблицу
+                    }
+                });
+            }
+
+            // Обработка удаления студентов
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('btn-danger') && e.target.textContent === 'Удалить') {
+                    const row = e.target.closest('tr');
+                    const studentName = row.cells[0].textContent;
+
+                    if (confirm(`Вы уверены, что хотите удалить студента ${studentName} из группы?`)) {
+                        row.remove();
+                        alert(`Студент ${studentName} удален из группы`);
+                    }
+                }
+            });
         });
     </script>
 </body>
