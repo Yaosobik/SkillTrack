@@ -44,12 +44,6 @@ def grades():
     tasks = Task.query.order_by(Task.date.desc()).all()
     return render_template("home_student.html", tasks=tasks)
 
-@main.route("/home/teacher/submissions")
-def teacher_submissions():
-    from ..models.submission import Submission
-    submissions = Submission.query.order_by(Submission.submitted_at.desc()).all()
-    return render_template("teacher_check_submissions.html", submissions=submissions)
-
 
 @main.route("/home/teacher/check")
 def teacher_home_check():
@@ -63,12 +57,6 @@ def teacher_home_check():
 @main.route("/home/teacher/create")
 def teacher_create():
     return render_template("home_teacher_send_task.html")
-
-@main.route("/home/teacher/submissions")
-def teacher_submissions():
-    from ..models.submission import Submission
-    submissions = Submission.query.order_by(Submission.submitted_at.desc()).all()
-    return render_template("teacher_check_submissions.html", submissions=submissions)
 
 
 @main.route("/home/teacher/grades")

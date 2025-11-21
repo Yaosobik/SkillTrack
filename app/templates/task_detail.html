@@ -23,8 +23,6 @@
 
       <hr>
 
-      <a href="{{ url_for('task.view_task', task_id=task.id) }}" class="btn" style="margin-bottom:16px;">Открыть задание</a>
-
       <form action="{{ url_for('task.submit_answer', task_id=task.id) }}" method="post">
         <!-- если есть система пользователей, email можно подставлять из сессии -->
         <div style="margin-bottom:12px;">

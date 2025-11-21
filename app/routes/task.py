@@ -56,12 +56,7 @@ def create_topic():
 @task.route("/<int:task_id>", methods=["GET"])
 def view_task(task_id):
     t = Task.query.get_or_404(task_id)
-    return render_template("task_submission.html", task=t)
-
-@task.route("/submissions", methods=["GET"])
-def view_submissions():
-    submissions = Submission.query.all()
-    return render_template("teacher_check_submissions.html", submissions=submissions)
+    return render_template("task_detail.html", task=t)
 
 
 @task.route("/<int:task_id>/submit", methods=["POST"])
