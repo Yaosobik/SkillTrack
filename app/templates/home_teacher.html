@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href = "{{ url_for('static', filename='css/main.css') }}">
     <title>SkillTrack – Преподаватель</title>
     <style>
         /* Основные стили страницы ученика */
@@ -35,11 +36,22 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 1.5rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 32px;
             padding: 0 8px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            background-color: #3a5ed0;
+            border-radius: 6px;
         }
 
         .menu {
@@ -299,13 +311,202 @@
         .tab-content.active {
             display: block;
         }
+
+        /* Детальный просмотр */
+        .detail-view {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .detail-meta {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* УЛУЧШЕННАЯ КНОПКА НАЗАД */
+        .back-btn {
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .back-btn:active {
+            background: #f0f2f8;
+            transform: translateY(1px);
+        }
+
+        .detail-content {
+            margin-bottom: 24px;
+        }
+
+        .submission-section {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .grade-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e4e7f0;
+        }
+
+        .file-icon {
+            color: #3a5ed0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Стили для заголовка с кнопкой "Добавить оценки" */
+        .grades-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="layout">
         <!-- ЛЕВАЯ ПАНЕЛЬ - ТЕМНАЯ -->
         <aside class="sidebar">
-            <h2 class="logo">SkillTrack</h2>
+            <h2 class="logo">
+                <div>
+                <img class="logo__image" src="../static/image/logo_home.png" alt="SkillTrack">
+                </div>
+            </h2>
             <nav class="menu">
                 <a class="menu-item active" data-tab="assign-tasks">Выдать задания</a>
                 <a class="menu-item" data-tab="check-tasks">Проверка заданий</a>
@@ -361,26 +562,79 @@
 
                 <h3 style="margin-bottom: 16px;">Активные задания</h3>
                 <div class="tasks">
-                    <div class="task selected">
+                    <div class="task selected" data-task="1">
                         <div>
                             <h3>Задание 1: Алгоритмы сортировки</h3>
                             <p>Реализовать алгоритмы быстрой сортировки и сортировки слиянием</p>
                         </div>
                         <span class="date">Срок: 15.12.2023</span>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task="2">
                         <div>
                             <h3>Задание 2: Веб-приложение</h3>
                             <p>Создать простое веб-приложение с использованием HTML, CSS и JavaScript</p>
                         </div>
                         <span class="date">Срок: 20.12.2023</span>
                     </div>
-                    <div class="task">
+                    <div class="task" data-task="3">
                         <div>
                             <h3>Задание 3: Базы данных</h3>
                             <p>Спроектировать схему БД для системы управления курсами</p>
                         </div>
                         <span class="date">Срок: 25.12.2023</span>
+                    </div>
+                </div>
+
+                <!-- Детальный просмотр задания -->
+                <div id="task-detail" class="detail-view hidden">
+                    <div class="detail-header">
+                        <div>
+                            <h2 class="detail-title" id="detail-task-title">Задание 1: Алгоритмы сортировки</h2>
+                            <div class="detail-meta">
+                                <span id="detail-task-deadline">Срок: 15.12.2023</span> •
+                                <span id="detail-task-group">Группа: Все группы</span>
+                            </div>
+                        </div>
+                        <!-- УЛУЧШЕННАЯ КНОПКА НАЗАД -->
+                        <button class="back-btn" id="back-from-task">
+                            <span>←</span>
+                            Назад к заданиям
+                        </button>
+                    </div>
+
+                    <div class="detail-content">
+                        <h3 style="margin-bottom: 12px;">Описание задания</h3>
+                        <p id="detail-task-description">Реализовать алгоритмы быстрой сортировки и сортировки слиянием. Необходимо предоставить работающий код на языке Python с комментариями.</p>
+
+                        <div style="margin-top: 24px;">
+                            <h3 style="margin-bottom: 12px;">Требования</h3>
+                            <ul style="color: #666; line-height: 1.6;">
+                                <li>Реализация двух алгоритмов сортировки</li>
+                                <li>Код должен быть читаемым и содержать комментарии</li>
+                                <li>Добавить тесты для проверки работы алгоритмов</li>
+                                <li>Сравнить производительность алгоритмов на разных наборах данных</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <h3 style="margin-bottom: 12px;">Сданные работы</h3>
+                            <div class="tasks">
+                                <div class="task" data-student="1">
+                                    <div>
+                                        <h3>Иванов А.</h3>
+                                        <p>Сдано 12.12.2023</p>
+                                    </div>
+                                    <span class="date">Оценка: 92</span>
+                                </div>
+                                <div class="task" data-student="2">
+                                    <div>
+                                        <h3>Петрова М.</h3>
+                                        <p>Сдано 13.12.2023</p>
+                                    </div>
+                                    <span class="date">Ожидает проверки</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -390,28 +644,28 @@
                 <h1 class="title">Проверка заданий</h1>
 
                 <div class="tasks">
-                    <div class="task selected">
+                    <div class="task selected" data-submission="1">
                         <div>
                             <h3>Иванов А. — Алгоритмы сортировки</h3>
                             <p>Ожидает проверки</p>
                         </div>
                         <span class="date">10.12.2023</span>
                     </div>
-                    <div class="task">
+                    <div class="task" data-submission="2">
                         <div>
                             <h3>Петрова М. — Веб-приложение</h3>
                             <p>Ожидает проверки</p>
                         </div>
                         <span class="date">12.12.2023</span>
                     </div>
-                    <div class="task">
+                    <div class="task" data-submission="3">
                         <div>
                             <h3>Сидоров П. — Алгоритмы сортировки</h3>
                             <p>Проверено (85 баллов)</p>
                         </div>
                         <span class="date">09.12.2023</span>
                     </div>
-                    <div class="task">
+                    <div class="task" data-submission="4">
                         <div>
                             <h3>Козлова Е. — Базы данных</h3>
                             <p>Ожидает проверки</p>
@@ -419,11 +673,71 @@
                         <span class="date">14.12.2023</span>
                     </div>
                 </div>
+
+                <!-- Детальный просмотр сданной работы -->
+                <div id="submission-detail" class="detail-view hidden">
+                    <div class="detail-header">
+                        <div>
+                            <h2 class="detail-title" id="detail-submission-title">Иванов А. — Алгоритмы сортировки</h2>
+                            <div class="detail-meta">
+                                <span id="detail-submission-date">Сдано: 10.12.2023</span> •
+                                <span id="detail-submission-status">Статус: Ожидает проверки</span>
+                            </div>
+                        </div>
+                        <!-- УЛУЧШЕННАЯ КНОПКА НАЗАД -->
+                        <button class="back-btn" id="back-from-submission">
+                            <span>←</span>
+                            Назад к списку
+                        </button>
+                    </div>
+
+                    <div class="detail-content">
+                        <div class="submission-section">
+                            <div class="submission-header">
+                                <h3>Работа студента</h3>
+                                <div>
+                                    <input type="number" class="grade-input" placeholder="Оценка" min="0" max="100">
+                                    <button class="btn" style="margin-left: 8px;">Сохранить оценку</button>
+                                </div>
+                            </div>
+
+                            <div class="file-list">
+                                <div class="file-item">
+                                    <span class="file-icon">📄</span>
+                                    <span>sorting_algorithms.py</span>
+                                    <button class="btn" style="margin-left: auto; padding: 4px 12px;">Скачать</button>
+                                </div>
+                                <div class="file-item">
+                                    <span class="file-icon">📄</span>
+                                    <span>test_results.pdf</span>
+                                    <button class="btn" style="margin-left: auto; padding: 4px 12px;">Скачать</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <h3 style="margin-bottom: 12px;">Комментарий студента</h3>
+                            <p style="color: #666; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                                Реализовал оба алгоритма сортировки. Добавил сравнительный анализ производительности.
+                                Временная сложность соответствует ожиданиям.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <h3 style="margin-bottom: 12px;">Комментарий преподавателя</h3>
+                            <textarea class="comment-input" placeholder="Введите ваш комментарий..."></textarea>
+                            <button class="btn" style="margin-top: 12px;">Отправить комментарий</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Вкладка "Оценки" -->
             <div id="grades" class="tab-content">
-                <h1 class="title">Оценки студентов</h1>
+                <div class="grades-header">
+                    <h1 class="title">Оценки студентов</h1>
+                    <button class="btn" id="add-grade-btn">Добавить оценки</button>
+                </div>
 
                 <div class="form-container">
                     <h3 style="margin-bottom: 16px;">Фильтры</h3>
@@ -542,6 +856,51 @@
         </main>
     </div>
 
+    <!-- Модальное окно для добавления оценки -->
+    <div class="modal" id="add-grade-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Добавить оценку</h2>
+                <button class="modal-close" id="close-grade-modal">&times;</button>
+            </div>
+            <form id="add-grade-form">
+                <div class="form-group">
+                    <label for="student-select">Студент</label>
+                    <select id="student-select" class="form-control" required>
+                        <option value="">Выберите студента</option>
+                        <option value="1">Иванов А.</option>
+                        <option value="2">Петрова М.</option>
+                        <option value="3">Сидоров П.</option>
+                        <option value="4">Козлова Е.</option>
+                        <option value="5">Николаев В.</option>
+                        <option value="6">Смирнова О.</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="task-select">Задание</label>
+                    <select id="task-select" class="form-control" required>
+                        <option value="">Выберите задание</option>
+                        <option value="1">Алгоритмы сортировки</option>
+                        <option value="2">Веб-приложение</option>
+                        <option value="3">Базы данных</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="grade-value">Оценка (0-100)</label>
+                    <input type="number" id="grade-value" class="form-control" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade-comment">Комментарий</label>
+                    <textarea id="grade-comment" class="form-control" rows="3" placeholder="Добавьте комментарий к оценке (необязательно)"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-grade">Отмена</button>
+                    <button type="submit" class="btn">Сохранить оценку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Переключение вкладок
         (function(){
@@ -599,6 +958,138 @@
                 if(e.key === 'Escape') closeMenu();
             });
         })();
+
+        // Кликабельность заданий и работ
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskList = document.querySelector('#assign-tasks .tasks');
+            const taskDetail = document.getElementById('task-detail');
+            const backFromTask = document.getElementById('back-from-task');
+
+            const submissionList = document.querySelector('#check-tasks .tasks');
+            const submissionDetail = document.getElementById('submission-detail');
+            const backFromSubmission = document.getElementById('back-from-submission');
+
+            // Обработка кликов по заданиям
+            if (taskList) {
+                taskList.addEventListener('click', function(e) {
+                    const task = e.target.closest('.task');
+                    if (task && task.dataset.task) {
+                        // Скрываем список заданий и показываем детали
+                        taskList.style.display = 'none';
+                        document.querySelector('#assign-tasks .form-container').style.display = 'none';
+                        document.querySelector('#assign-tasks h3').style.display = 'none';
+                        taskDetail.classList.remove('hidden');
+
+                        // Заполняем данные задания (в реальном приложении - запрос к API)
+                        const taskId = task.dataset.task;
+                        // Здесь можно добавить логику загрузки данных задания
+                    }
+                });
+            }
+
+            // Обработка кликов по сданным работам
+            if (submissionList) {
+                submissionList.addEventListener('click', function(e) {
+                    const submission = e.target.closest('.task');
+                    if (submission && submission.dataset.submission) {
+                        // Скрываем список и показываем детали
+                        submissionList.style.display = 'none';
+                        submissionDetail.classList.remove('hidden');
+
+                        // Заполняем данные работы (в реальном приложении - запрос к API)
+                        const submissionId = submission.dataset.submission;
+                        // Здесь можно добавить логику загрузки данных работы
+                    }
+                });
+            }
+
+            // Кнопка "Назад" для заданий
+            if (backFromTask) {
+                backFromTask.addEventListener('click', function() {
+                    taskDetail.classList.add('hidden');
+                    taskList.style.display = 'flex';
+                    document.querySelector('#assign-tasks .form-container').style.display = 'block';
+                    document.querySelector('#assign-tasks h3').style.display = 'block';
+                });
+            }
+
+            // Кнопка "Назад" для работ
+            if (backFromSubmission) {
+                backFromSubmission.addEventListener('click', function() {
+                    submissionDetail.classList.add('hidden');
+                    submissionList.style.display = 'flex';
+                });
+            }
+
+            // Обработка кликов по студентам в деталях задания
+            const studentTasks = document.querySelectorAll('#task-detail .task');
+            studentTasks.forEach(task => {
+                task.addEventListener('click', function() {
+                    // Переключаемся на вкладку проверки заданий
+                    document.querySelector('[data-tab="check-tasks"]').click();
+                    // Здесь можно добавить автоматическое открытие соответствующей работы
+                });
+            });
+
+            // Модальное окно для добавления оценки
+            const addGradeBtn = document.getElementById('add-grade-btn');
+            const addGradeModal = document.getElementById('add-grade-modal');
+            const closeGradeModal = document.getElementById('close-grade-modal');
+            const cancelGrade = document.getElementById('cancel-grade');
+            const addGradeForm = document.getElementById('add-grade-form');
+
+            // Открытие модального окна
+            if (addGradeBtn) {
+                addGradeBtn.addEventListener('click', function() {
+                    addGradeModal.classList.add('active');
+                });
+            }
+
+            // Закрытие модального окна
+            function closeGradeModalFunc() {
+                addGradeModal.classList.remove('active');
+                addGradeForm.reset();
+            }
+
+            if (closeGradeModal) {
+                closeGradeModal.addEventListener('click', closeGradeModalFunc);
+            }
+
+            if (cancelGrade) {
+                cancelGrade.addEventListener('click', closeGradeModalFunc);
+            }
+
+            // Закрытие по клику вне модального окна
+            addGradeModal.addEventListener('click', function(e) {
+                if (e.target === addGradeModal) {
+                    closeGradeModalFunc();
+                }
+            });
+
+            // Обработка отправки формы
+            if (addGradeForm) {
+                addGradeForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Получение данных из формы
+                    const studentSelect = document.getElementById('student-select');
+                    const taskSelect = document.getElementById('task-select');
+                    const gradeValue = document.getElementById('grade-value').value;
+                    const gradeComment = document.getElementById('grade-comment').value;
+
+                    const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+                    const taskName = taskSelect.options[taskSelect.selectedIndex].text;
+
+                    // В реальном приложении здесь был бы запрос к API
+                    alert(`Оценка ${gradeValue} добавлена для студента ${studentName} по заданию "${taskName}"`);
+
+                    // Закрытие модального окна
+                    closeGradeModalFunc();
+
+                    // Здесь можно добавить обновление таблицы с оценками
+                });
+            }
+        });
     </script>
 </body>
 </html>

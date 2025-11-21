@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href = "{{ url_for('static', filename='css/main.css') }}">
     <title>SkillTrack – Ученик</title>
     <style>
         /* Основные стили страницы */
@@ -327,7 +328,11 @@
     <div class="layout">
         <!-- ЛЕВАЯ ПАНЕЛЬ - ТЕМНАЯ -->
         <aside class="sidebar">
-            <h2 class="logo">SkillTrack</h2>
+            <h2 class="logo">
+                <div>
+                <img class="logo__image" src="../static/image/logo_home.png" alt="SkillTrack">
+                </div>
+            </h2>
             <nav class="menu">
                 <a class="menu-item active" data-tab="tasks">Задания</a>
                 <a class="menu-item" data-tab="grades">Оценки</a>
