@@ -9,8 +9,6 @@
 <main style="max-width:1000px;margin:24px auto;padding:16px;">
     <h1>Проверка заданий</h1>
 
-    <a href="{{ url_for('main.teacher_submissions') }}" class="btn" style="margin-bottom:16px;">Просмотреть все задания</a>
-
     {% if submissions %}
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
         {% for s in submissions %}
@@ -42,4 +40,3 @@
     {% endif %}
 </main>
 </body>
-</html>
