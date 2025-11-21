@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from ..models.task import Task
 
 main = Blueprint("main", __name__)
 
@@ -40,7 +41,8 @@ def registration_teacher():
 
 @main.route("/home/student")
 def grades():
-    return render_template("home_student.html")
+    tasks = Task.query.order_by(Task.date.desc()).all()
+    return render_template("home_student.html", tasks=tasks)
 
 
 @main.route("/home/teacher/check")

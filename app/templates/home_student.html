@@ -360,56 +360,25 @@
                 <h1 class="title">Мои задания</h1>
 
                 <div class="tasks">
-                    <div class="task selected">
+                    {% for t in tasks %}
+                    <div class="task {% if loop.first %}selected{% endif %}">
                         <div>
-                            <h3>Задание 1: Алгоритмы сортировки</h3>
-                            <p>Реализовать алгоритмы быстрой сортировки и сортировки слиянием</p>
+                            <h3>{{ t.topic or 'Без темы' }}</h3>
+                            <p>{{ t.task or '' }}</p>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: 15.12.2023</span>
-                            <span class="status completed">Выполнено</span>
-                        </div>
-                    </div>
-                    <div class="task">
-                        <div>
-                            <h3>Задание 2: Веб-приложение</h3>
-                            <p>Создать простое веб-приложение с использованием HTML, CSS и JavaScript</p>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: 20.12.2023</span>
+                            <span class="date">Срок: {{ t.deadline.strftime('%d.%m.%Y') if t.deadline else '—' }}</span>
                             <span class="status pending">Ожидает проверки</span>
                         </div>
                     </div>
+                    {% else %}
                     <div class="task">
                         <div>
-                            <h3>Задание 3: Базы данных</h3>
-                            <p>Спроектировать схему БД для системы управления курсами</p>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: 25.12.2023</span>
-                            <span class="status pending">В процессе</span>
+                            <h3>Заданий пока нет</h3>
+                            <p>Проверьте страницу позже или добавьте задание.</p>
                         </div>
                     </div>
-                    <div class="task">
-                        <div>
-                            <h3>Задание 4: Тестирование</h3>
-                            <p>Написать unit-тесты для приложения</p>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: 10.12.2023</span>
-                            <span class="status overdue">Просрочено</span>
-                        </div>
-                    </div>
-                    <div class="task">
-                        <div>
-                            <h3>Задание 5: Документация</h3>
-                            <p>Подготовить документацию к проекту</p>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="date">Срок: 30.12.2023</span>
-                            <span class="status completed">Выполнено</span>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
