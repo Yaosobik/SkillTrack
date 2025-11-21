@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href = "{{ url_for('static', filename='css/main.css') }}">
+    <title>SkillTrack - Платформа для учебных заданий</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --light-gray: #f8f9fa;
+            --medium-gray: #7f8c8d;
+            --text-color: #333;
+            --white: #ffffff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+            margin-left: 5px;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+            position: relative;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--medium-gray);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 0;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        nav ul li a.active {
+            color: var(--primary-color);
+        }
+
+        nav ul li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-register {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-register:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 80px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.2)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #5a6c7d;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--light-gray);
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--white);
+            font-size: 28px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-size: 22px;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background-color: var(--light-gray);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background-color: var(--primary-color);
+            z-index: 1;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0 auto 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .step h3 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-size: 22px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background-color: var(--light-gray);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--medium-gray);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--medium-gray);
+            font-size: 14px;
+        }
+
+        /* Contacts Section */
+        .contacts {
+            padding: 100px 0;
+            background-color: var(--light-gray);
+            text-align: center;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        .contact-card h3 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-size: 20px;
+        }
+
+        .contact-card p {
+            color: var(--medium-gray);
+            margin-bottom: 10px;
+        }
+
+        .contact-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-card a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .btn-light {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--white);
+        }
+
+        .btn-light:hover {
+            background-color: transparent;
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo span {
+            color: var(--primary-color);
+        }
+
+        .footer-about p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-heading {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img class="header__img" src="../static/image/logo.png"/>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/" class="active">Главная</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <ul>
+                    <a href="/sign" class="btn btn-login">Войти</a>
+                    <a href="/registration" class="btn btn-register">Зарегистрироваться</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>SkillTrack - Учебная платформа нового поколения</h1>
+                    <p>Современная веб-платформа для эффективного взаимодействия преподавателей и студентов. Публикуйте задания, отслеживайте прогресс и управляйте учебным процессом в одном месте.</p>
+                    <div class="hero-buttons">
+                        <a href="/sign" class="btn btn-register btn-large">Начать использовать</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div style="font-size: 300px; color: var(--primary-color); opacity: 0.7;">📊</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Основные возможности</h2>
+                <p>SkillTrack предлагает все необходимое для организации эффективного учебного процесса</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Публикация заданий</h3>
+                    <p>Создавайте и публикуйте учебные задания с четкими сроками сдачи и необходимыми материалами.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Отслеживание дедлайнов</h3>
+                    <p>Студенты всегда в курсе сроков сдачи, а преподаватели могут легко контролировать процесс.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📤</div>
+                    <h3>Загрузка работ</h3>
+                    <p>Простая и удобная загрузка выполненных заданий с поддержкой различных форматов файлов.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Оценивание</h3>
+                    <p>Выставляйте оценки, оставляйте комментарии и предоставляйте обратную связь студентам.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Разделение по курсам</h3>
+                    <p>Организуйте учебные материалы и задания по курсам и группам для простой навигации.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Безопасность данных</h3>
+                    <p>Все данные защищены и доступны только авторизованным пользователям системы.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>Как это работает</h2>
+                <p>Всего несколько простых шагов для организации учебного процесса</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Регистрация</h3>
+                    <p>Создайте аккаунт и присоединитесь к своему учебному заведению или курсу.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Настройка</h3>
+                    <p>Преподаватели настраивают курсы, а студенты присоединяются к ним.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Работа с заданиями</h3>
+                    <p>Преподаватели публикуют задания, студенты выполняют и загружают работы.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Оценка и анализ</h3>
+                    <p>Преподаватели проверяют работы и выставляют оценки в системе.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Отзывы пользователей</h2>
+                <p>Что говорят преподаватели и студенты о платформе SkillTrack</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Работает."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">КМ</div>
+                        <div class="author-info">
+                            <h4>Келбялиев Максим</h4>
+                            <p>Разработчик</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Сайт приятный, жаль пару пятерок себе поставить нельзя("
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">КС</div>
+                        <div class="author-info">
+                            <h4>Кешишян Сергей</h4>
+                            <p>Студент 2 курса</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contacts">
+        <div class="container">
+            <div class="section-title">
+                <h2>Контакты</h2>
+                <p>Свяжитесь с нами любым удобным способом</p>
+            </div>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Адрес</h3>
+                    <p>г. Москва, ул. Образцова, д. 25</p>
+                    <p>Бизнес-центр "Академический"</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <h3>Телефон</h3>
+                    <p><a href="tel:+74951234567">+7 (903) 111 97 07</a></p>
+                    <p>Пн-Пт: 9:00 - 18:00</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Электронная почта</h3>
+                    <p><a href="mailto:info@skilltrack.ru">magomedovdinislam05@gmail.com</a></p>
+                    <p>По общим вопросам</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">💬</div>
+                    <h3>Telegram</h3>
+                    <p><a href="https://t.me/skilltrack_support" target="_blank">@yaosobik</a></p>
+                    <p>Быстрая техническая поддержка</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 SkillTrack. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
